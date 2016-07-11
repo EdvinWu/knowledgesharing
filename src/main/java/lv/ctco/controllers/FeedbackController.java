@@ -3,7 +3,6 @@ package lv.ctco.controllers;
 import lv.ctco.entities.Feedback;
 import lv.ctco.entities.KnowledgeSession;
 import lv.ctco.repository.FeedbackRepository;
-import lv.ctco.repository.PersonRepository;
 import lv.ctco.repository.SessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -14,10 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static lv.ctco.Consts.*;
+import static lv.ctco.Consts.FEEDBACK_PATH;
+import static lv.ctco.Consts.SESSION_PATH;
 
 @RestController
 @RequestMapping(SESSION_PATH)
@@ -50,16 +47,17 @@ public class FeedbackController {
     }
 
     @Transactional
-    @RequestMapping(path = "{id}" + FEEDBACK_PATH, method = RequestMethod.POST)
+    @RequestMapping(path = "/{id}" + FEEDBACK_PATH, method = RequestMethod.POST)
     public ResponseEntity<?> addFeedback(@PathVariable("id") long id,
                                          @RequestBody Feedback feedback,
                                          UriComponentsBuilder b) {
         if (sessionRepository.exists(id)) {
             KnowledgeSession session = sessionRepository.findOne(id);
             session.addFeedback(feedback);
+            feedbackRepository.save(feedback);
             sessionRepository.save(session);
             UriComponents uriComponents =
-                    b.path("{id}" + FEEDBACK_PATH).buildAndExpand(session.getId());
+                    b.path("/{id}" + FEEDBACK_PATH +"/"+ feedback.getId()).buildAndExpand(session.getId());
 
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.setLocation(uriComponents.toUri());

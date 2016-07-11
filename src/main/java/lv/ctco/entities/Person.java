@@ -57,5 +57,11 @@ public class Person {
         this.attended = attended;
     }
 
+    public Calendar getCalendar() {
+        return calendar;
+    }
 
+    public void setCalendar(Calendar calendar) {
+        this.calendar = calendar;
+    }
 }
