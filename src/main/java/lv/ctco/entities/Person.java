@@ -8,11 +8,11 @@ import java.util.List;
 public class Person {
     @Id
     @GeneratedValue
-    long id;
-    String fullName;
-    String userName;
-    String password;
-    List<KnowledgeSession> attended;
+    private long id;
+    private String fullName;
+    private String userName;
+    private String password;
+    private List<KnowledgeSession> attended;
     //TODO
     //Calendar
 

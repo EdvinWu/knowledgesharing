@@ -12,7 +12,7 @@ public class KnowledgeSession {
 
     @Id
     @GeneratedValue
-    private int id;
+    private long id;
     private String title;
     private String author;
     private int votes;
@@ -20,11 +20,11 @@ public class KnowledgeSession {
     private List<Feedback> feedbacks;
     private List<Person> users;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

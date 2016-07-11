@@ -6,16 +6,16 @@ import javax.persistence.Id;
 @Entity
 public class Feedback {
     @Id
-    private int id;
+    private long id;
     private int rating;
     private Person user;
     private String comment;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
