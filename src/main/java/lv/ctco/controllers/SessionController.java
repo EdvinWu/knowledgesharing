@@ -63,14 +63,14 @@ public class SessionController {
 
     @Transactional
     @RequestMapping(path = " /{id}", method = RequestMethod.PUT)
-    public ResponseEntity<?> updateStudentByID(@PathVariable("id") long id,
+    public ResponseEntity<?> updateSessionByID(@PathVariable("id") long id,
                                                @RequestBody KnowledgeSession session) {
 
         if (sessionRepository.exists(id)) {
-            KnowledgeSession editedStudent = sessionRepository.findOne(id);
-            editedStudent.setAuthor(session.getAuthor());
-            editedStudent.setTitle(session.getTitle());
-            editedStudent.setVotes(session.getVotes());
+            KnowledgeSession editedSession = sessionRepository.findOne(id);
+            editedSession.setAuthor(session.getAuthor());
+            editedSession.setTitle(session.getTitle());
+            editedSession.setVotes(session.getVotes());
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
