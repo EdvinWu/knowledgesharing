@@ -2,6 +2,7 @@ package lv.ctco.entities;
 
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,14 +18,14 @@ public class KnowledgeSession {
     private String author;
     private int votes;
     @OneToMany
-    private List<Tag> tags;
+    private List<Tag> tags = new ArrayList<>();
     @OneToMany
-    private List<Feedback> feedbacks;
+    private List<Feedback> feedbacks = new ArrayList<>();
     @ManyToMany
     @JoinTable(name = "session_user",
             joinColumns = @JoinColumn(name = "session_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
-    private List<Person> users;
+    private List<Person> users = new ArrayList<>();
 
     public long getId() {
         return id;

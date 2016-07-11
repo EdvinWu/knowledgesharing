@@ -1,8 +1,10 @@
 package lv.ctco.controllers;
 
 import io.restassured.RestAssured;
+import io.restassured.http.Headers;
 import io.restassured.parsing.Parser;
 import lv.ctco.KnowledgeSharingApplication;
+import lv.ctco.entities.KnowledgeSession;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +14,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.util.ArrayList;
+
+import static io.restassured.RestAssured.delete;
 import static io.restassured.RestAssured.get;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = KnowledgeSharingApplication.class)
@@ -21,9 +28,11 @@ import static io.restassured.RestAssured.get;
 public class SessionControllerTest {
 
     public static final int OK = HttpStatus.OK.value();
+    public static final int NOT_FOUND = HttpStatus.NOT_FOUND.value();
+    public static final int CREATED = HttpStatus.CREATED.value();
 
     @Before
-    public void before(){
+    public void before() {
         RestAssured.port = 8090;
         RestAssured.defaultParser = Parser.JSON;
     }
@@ -32,4 +41,75 @@ public class SessionControllerTest {
     public void testGetAllOK() {
         get("/session").then().statusCode(OK);
     }
+
+    @Test
+    public void testGetOneNotFound() {
+        get("/session/-1").then().statusCode(NOT_FOUND);
+    }
+
+    @Test
+    public void testGetOneOK() {
+        KnowledgeSession session = new KnowledgeSession();
+        session.setAuthor("John");
+        session.setTitle("Snow");
+        session.setVotes(0);
+
+        Headers header = given().contentType("application/json").body(session).when().post("/session").getHeaders();
+        get(header.getValue("Location")).then().body("author", equalTo("John"));
+
+    }
+
+    @Test
+    public void testPostCreated() {
+        KnowledgeSession session = new KnowledgeSession();
+        given().contentType("application/json").body(session)
+                .when().post("/session")
+                .then().statusCode(CREATED);
+    }
+
+    @Test
+    public void testDeleteOK() {
+        KnowledgeSession session = new KnowledgeSession();
+        session.setAuthor("John");
+        session.setTitle("Snow");
+        session.setVotes(0);
+
+        Headers header = given().contentType("application/json").body(session).when().post("/session").getHeaders();
+        delete(header.getValue("Location")).then().statusCode(OK);
+    }
+
+    @Test
+    public void testDeleteNotFound() {
+        delete("/session/-1").then().statusCode(NOT_FOUND);
+    }
+
+    @Test
+    public void testPutOK() {
+        KnowledgeSession session = new KnowledgeSession();
+        session.setAuthor("John123");
+        session.setTitle("Snow123");
+        session.setVotes(0);
+
+
+        Headers header = given().contentType("application/json").body(session)
+                .when().post("/session/").getHeaders();
+
+        session.setAuthor("Joe");
+        session.setTitle("XO");
+        session.setVotes(0);
+        given().contentType("application/json").body(session)
+                .when().put(header.getValue("Location"))
+                .then().statusCode(OK);
+    }
+
+    @Test
+    public void testPutFails() {
+        KnowledgeSession student = new KnowledgeSession();
+        given().contentType("application/json").body(student)
+                .when().put("session/-1")
+                .then().statusCode(NOT_FOUND);
+    }
+
+
+
 }

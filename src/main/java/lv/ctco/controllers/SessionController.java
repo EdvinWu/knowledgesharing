@@ -3,13 +3,14 @@ package lv.ctco.controllers;
 import lv.ctco.entities.KnowledgeSession;
 import lv.ctco.repository.SessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
@@ -23,5 +24,54 @@ public class SessionController {
     public ResponseEntity<?> getAllSessions() {
         List<KnowledgeSession> sessions = sessionRepository.findAll();
         return new ResponseEntity<>(sessions, HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> getSessionById(@PathVariable("id") long id) {
+        if (sessionRepository.exists(id)) {
+            KnowledgeSession session = sessionRepository.findOne(id);
+            return new ResponseEntity<>(session, HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<?> addSession(@RequestBody KnowledgeSession session, UriComponentsBuilder b) {
+        sessionRepository.save(session);
+
+        UriComponents uriComponents =
+                b.path("/session/{id}").buildAndExpand(session.getId());
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.setLocation(uriComponents.toUri());
+
+        return new ResponseEntity<String>(responseHeaders,HttpStatus.CREATED);
+    }
+
+    @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteSessionById(@PathVariable("id") long id) {
+        if (sessionRepository.exists(id)) {
+            sessionRepository.delete(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @Transactional
+    @RequestMapping(path = " /{id}", method = RequestMethod.PUT)
+    public ResponseEntity<?> updateStudentByID(@PathVariable("id") long id,
+                                               @RequestBody KnowledgeSession session) {
+
+        if (sessionRepository.exists(id)) {
+            KnowledgeSession editedStudent = sessionRepository.findOne(id);
+            editedStudent.setAuthor(session.getAuthor());
+            editedStudent.setTitle(session.getTitle());
+            editedStudent.setVotes(session.getVotes());
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }
