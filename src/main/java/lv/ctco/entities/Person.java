@@ -9,6 +9,7 @@ public class Person {
     @GeneratedValue
     private long id;
     private String fullName;
+    @Column(unique=true,nullable = false)
     private String userName;
     private String password;
     @ManyToMany(mappedBy = "users")
