@@ -1,10 +1,7 @@
 package lv.ctco.entities;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 
@@ -18,8 +15,14 @@ public class KnowledgeSession {
     private String title;
     private String author;
     private int votes;
-    private List<String> tags;
+    @OneToMany
+    private List<Tag> tags;
+    @OneToMany
     private List<Feedback> feedbacks;
+    @ManyToMany
+    @JoinTable(name = "session_user",
+            joinColumns = @JoinColumn(name = "session_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private List<Person> users;
 
     public long getId() {
@@ -54,11 +57,11 @@ public class KnowledgeSession {
         this.votes = votes;
     }
 
-    public List<String> getTags() {
+    public List<Tag> getTags() {
         return tags;
     }
 
-    public void setTags(List<String> tags) {
+    public void setTags(List<Tag> tags) {
         this.tags = tags;
     }
 

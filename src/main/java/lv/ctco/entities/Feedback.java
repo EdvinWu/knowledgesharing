@@ -1,8 +1,6 @@
 package lv.ctco.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 
 @Entity
@@ -11,6 +9,7 @@ public class Feedback {
     @GeneratedValue
     private long id;
     private int rating;
+    @ManyToOne
     private Person user;
     private String comment;
 

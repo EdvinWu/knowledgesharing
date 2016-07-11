@@ -1,13 +1,9 @@
 package lv.ctco.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "User")
 public class Person {
     @Id
     @GeneratedValue
@@ -15,6 +11,7 @@ public class Person {
     private String fullName;
     private String userName;
     private String password;
+    @ManyToMany(mappedBy = "users")
     private List<KnowledgeSession> attended;
     //TODO
     //Calendar
