@@ -3,6 +3,7 @@ package lv.ctco.controllers;
 import io.restassured.RestAssured;
 import io.restassured.parsing.Parser;
 import lv.ctco.KnowledgeSharingApplication;
+import lv.ctco.entities.KnowledgeSession;
 import lv.ctco.entities.Person;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +28,7 @@ public class FeedbackControllerTest {
 
 
     @Before
-    public void before(){
+    public void before() {
         RestAssured.port = 8090;
         RestAssured.defaultParser = Parser.JSON;
     }
@@ -35,12 +36,25 @@ public class FeedbackControllerTest {
 
     @Test
     public void testSessionAccessToFeedback() throws Exception {
-        get(SESSION_PATH+FALLING_ID+FEEDBACK_PATH).then().statusCode(NOT_FOUND);
+        get(SESSION_PATH + FALLING_ID + FEEDBACK_PATH).then().statusCode(NOT_FOUND);
     }
 
     @Test
     public void testGetAllOK() {
-        get(SESSION_PATH+FEEDBACK_PATH).then().statusCode(OK);
+        get(SESSION_PATH + FEEDBACK_PATH).then().statusCode(OK);
     }
 
+    @Test
+    public void testGetOneNotFoundSession() {
+        get(SESSION_PATH + FALLING_ID + FEEDBACK_PATH).then().statusCode(NOT_FOUND);
+    }
+    public void testGetOneNotFoundFeedback() {
+
+        KnowledgeSession session = new KnowledgeSession();
+        session.setAuthor("John");
+        session.setTitle("Snow");
+        session.setVotes(0);
+
+        get(SESSION_PATH + "/" + session.getId() + FEEDBACK_PATH + FALLING_ID).then().statusCode(NOT_FOUND);
+    }
 }

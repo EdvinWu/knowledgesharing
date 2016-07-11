@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static lv.ctco.Consts.*;
+
 @RestController
 @RequestMapping(SESSION_PATH)
 public class FeedbackController {
@@ -30,9 +31,10 @@ public class FeedbackController {
             if (feedbackRepository.exists(feedbackID)) {
                 Feedback feedback = feedbackRepository.findOne(feedbackID);
                 return new ResponseEntity<>(feedback, HttpStatus.OK);
-            } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(path = "/{id}/feedback", method = RequestMethod.GET)
@@ -41,31 +43,27 @@ public class FeedbackController {
             feedbackRepository.findAll();
             return new ResponseEntity<>(HttpStatus.OK);
         }
-        else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @Transactional
-    @RequestMapping(path = "/feedback/{id}", method = RequestMethod.POST)
-    public ResponseEntity<?> addFeedback(@PathVariable("id") long id, @RequestBody Feedback feedback){
-        if (sessionRepository.exists(id)){
+    @RequestMapping(path = "{id}/feedback", method = RequestMethod.POST)
+    public ResponseEntity<?> addFeedback(@PathVariable("id") long id, @RequestBody Feedback feedback) {
+        if (sessionRepository.exists(id)) {
             KnowledgeSession session = sessionRepository.findOne(id);
             session.addFeedback(feedback);
             sessionRepository.save(session);
             return new ResponseEntity<>(HttpStatus.CREATED);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-       /* List<Feedback> feedbackList = new ArrayList<>();
-        feedbackList.add(feedback);
-        sessionRepository.findOne(id).setFeedbacks(feedbackList);
-        return new ResponseEntity<>(HttpStatus.CREATED);*/
     }
 
     @Transactional
     @RequestMapping(path = "/{id}/feedback/{fId}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteFeedback(@PathVariable("id") long id, @PathVariable("fId") long feedbackID){
-        if(sessionRepository.exists(id)){
+    public ResponseEntity<?> deleteFeedback(@PathVariable("id") long id, @PathVariable("fId") long feedbackID) {
+        if (sessionRepository.exists(id)) {
             KnowledgeSession session = sessionRepository.findOne(id);
-            if(session.removeFeedback(feedbackID)){
+            if (session.removeFeedback(feedbackID)) {
                 return new ResponseEntity<>(HttpStatus.OK);
             }
         }
@@ -74,11 +72,11 @@ public class FeedbackController {
 
     @Transactional
     @RequestMapping(path = "/{id}/feedback/{fId}", method = RequestMethod.PUT)
-    public ResponseEntity<?> updateFeedback(@PathVariable("id") long id, @PathVariable("fId") long feedbackID, @RequestBody Feedback feedback){
+    public ResponseEntity<?> updateFeedback(@PathVariable("id") long id, @PathVariable("fId") long feedbackID, @RequestBody Feedback feedback) {
         feedback.setId(feedbackID);
-        if(sessionRepository.exists(id)){
+        if (sessionRepository.exists(id)) {
             KnowledgeSession session = sessionRepository.findOne(id);
-            if (session.updateFeedback(feedback)){
+            if (session.updateFeedback(feedback)) {
                 return new ResponseEntity<>(HttpStatus.OK);
             }
         }
