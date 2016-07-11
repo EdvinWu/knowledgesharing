@@ -3,6 +3,7 @@ package lv.ctco.entities;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Optional;
 
 
 @Entity
@@ -83,17 +84,26 @@ public class KnowledgeSession {
         this.users = users;
     }
 
-    //TODO
+
     public boolean removeFeedback(long feedbackID) {
-        return false;
+        Optional<Feedback> feedback = feedbacks.stream()
+                .filter(f -> f.getId() == id)
+                .findAny();
+        return feedback.isPresent() && feedbacks.remove(feedback.get());
     }
 
-    //TODO
     public void addFeedback(Feedback feedback) {
-
+        this.feedbacks.add(feedback);
     }
-    //TODO
-    public boolean updateFeedback(Feedback feedback) {
+
+    public boolean updateFeedback(Feedback leavedFeedback) {
+        Optional<Feedback> feedback = feedbacks.stream()
+                .filter(f -> f.getId() == leavedFeedback.getId())
+                .findAny();
+        if (feedback.isPresent()){
+            feedback.get().setId(leavedFeedback.getId());
+            return true;
+        }
         return false;
     }
 }

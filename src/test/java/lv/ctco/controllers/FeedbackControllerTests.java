@@ -1,7 +1,8 @@
-package lv.ctco;
+package lv.ctco.controllers;
 
 import io.restassured.RestAssured;
 import io.restassured.parsing.Parser;
+import lv.ctco.KnowledgeSharingApplication;
 import lv.ctco.entities.Person;
 import org.junit.Before;
 import org.junit.Test;
