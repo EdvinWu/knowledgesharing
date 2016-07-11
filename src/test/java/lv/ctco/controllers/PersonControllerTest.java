@@ -42,7 +42,7 @@ public class PersonControllerTest {
         person.setPassword("1234DDD");
         person.setFullName("John Snow");
 
-        Headers header = given().contentType(JSON).body(person).when().post("/register/").getHeaders();
+        Headers header = given().contentType(JSON).body(person).when().post(REGISTER_PATH).getHeaders();
         get(header.getValue("Location")).then().body("password", equalTo("1234DDD"));
 
     }
@@ -50,10 +50,10 @@ public class PersonControllerTest {
     @Test
     public void testPostOK() {
         Person person = new Person();
-        person.setUserName("notAName");
+        person.setUserName("Sherlock");
         person.setFullName("John Snow");
 
-        given().contentType(JSON).body(person).when().post("/register/").then().statusCode(CREATED);
+        given().contentType(JSON).body(person).when().post(REGISTER_PATH).then().statusCode(CREATED);
 
     }
 
@@ -66,19 +66,19 @@ public class PersonControllerTest {
     @Test
     public void testPostFailed() {
         Person person = new Person();
-        person.setUserName("notAName");
+        person.setUserName("Watson");
         person.setFullName("John Snow");
-        given().contentType(JSON).body(person).when().post("/register/").then().statusCode(CREATED);
-        given().contentType(JSON).body(person).when().post("/register/").then().statusCode(BAD_REQUEST);
+        given().contentType(JSON).body(person).when().post(REGISTER_PATH).then().statusCode(CREATED);
+        given().contentType(JSON).body(person).when().post(REGISTER_PATH).then().statusCode(BAD_REQUEST);
 
     }
     @Test
     public void testDeleteOK() {
         Person person = new Person();
-        person.setUserName("ULTRAUSER");
+        person.setUserName("cannonboy");
 
-        Headers header = given().contentType(JSON).body(person).when().post().getHeaders();
-        get(header.getValue("Location")).then().body("userName", equalTo("ULTRAUSER"));
+        Headers header = given().contentType(JSON).body(person).when().post(REGISTER_PATH).getHeaders();
+        get(header.getValue("Location")).then().body("userName", equalTo("cannonboy"));
         delete(header.getValue("Location")).then().statusCode(OK);
 
     }
@@ -92,7 +92,7 @@ public class PersonControllerTest {
     @Test
     public void testPutOK() {
         Person person = new Person();
-        person.setUserName("notAName");
+        person.setUserName("CREEPY");
         person.setFullName("John Snow");
 
 
