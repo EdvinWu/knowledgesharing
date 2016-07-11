@@ -9,7 +9,7 @@ import java.util.List;
 
 
 @Entity
-@Table(name="Session")
+@Table(name = "Session")
 public class KnowledgeSession {
 
     @Id
