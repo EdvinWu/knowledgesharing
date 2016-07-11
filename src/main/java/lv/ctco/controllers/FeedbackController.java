@@ -25,7 +25,7 @@ public class FeedbackController {
     @Autowired
     SessionRepository sessionRepository;
 
-    @RequestMapping(path = "/{id}/feedback/{fId}", method = RequestMethod.GET)
+    @RequestMapping(path = "/{id}"+FEEDBACK_PATH+"/{fId}", method = RequestMethod.GET)
     public ResponseEntity<?> getSessionFeedback(@PathVariable("id") long id, @PathVariable("fId") long feedbackID) {
         if (sessionRepository.exists(id)) {
             if (feedbackRepository.exists(feedbackID)) {
@@ -37,7 +37,7 @@ public class FeedbackController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @RequestMapping(path = "/{id}/feedback", method = RequestMethod.GET)
+    @RequestMapping(path = "/{id}"+FEEDBACK_PATH, method = RequestMethod.GET)
     public ResponseEntity<?> getAllSessionFeedback(@PathVariable("id") long id) {
         if (sessionRepository.exists(id)) {
             feedbackRepository.findAll();
@@ -47,7 +47,7 @@ public class FeedbackController {
     }
 
     @Transactional
-    @RequestMapping(path = "{id}/feedback", method = RequestMethod.POST)
+    @RequestMapping(path = "{id}"+FEEDBACK_PATH, method = RequestMethod.POST)
     public ResponseEntity<?> addFeedback(@PathVariable("id") long id, @RequestBody Feedback feedback) {
         if (sessionRepository.exists(id)) {
             KnowledgeSession session = sessionRepository.findOne(id);
@@ -59,7 +59,7 @@ public class FeedbackController {
     }
 
     @Transactional
-    @RequestMapping(path = "/{id}/feedback/{fId}", method = RequestMethod.DELETE)
+    @RequestMapping(path = "/{id}"+FEEDBACK_PATH+"/{fId}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteFeedback(@PathVariable("id") long id, @PathVariable("fId") long feedbackID) {
         if (sessionRepository.exists(id)) {
             KnowledgeSession session = sessionRepository.findOne(id);
@@ -71,7 +71,7 @@ public class FeedbackController {
     }
 
     @Transactional
-    @RequestMapping(path = "/{id}/feedback/{fId}", method = RequestMethod.PUT)
+    @RequestMapping(path = "/{id}"+FEEDBACK_PATH+"/{fId}", method = RequestMethod.PUT)
     public ResponseEntity<?> updateFeedback(@PathVariable("id") long id, @PathVariable("fId") long feedbackID, @RequestBody Feedback feedback) {
         feedback.setId(feedbackID);
         if (sessionRepository.exists(id)) {

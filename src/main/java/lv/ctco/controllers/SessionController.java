@@ -34,8 +34,7 @@ public class SessionController {
             KnowledgeSession session = sessionRepository.findOne(id);
             return new ResponseEntity<>(session, HttpStatus.OK);
         }
-        else
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -48,7 +47,7 @@ public class SessionController {
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.setLocation(uriComponents.toUri());
 
-        return new ResponseEntity<String>(responseHeaders,HttpStatus.CREATED);
+        return new ResponseEntity<String>(responseHeaders, HttpStatus.CREATED);
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
@@ -57,12 +56,11 @@ public class SessionController {
             sessionRepository.delete(id);
             return new ResponseEntity<>(HttpStatus.OK);
         }
-        else
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @Transactional
-    @RequestMapping(path = " /{id}", method = RequestMethod.PUT)
+    @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity<?> updateSessionByID(@PathVariable("id") long id,
                                                @RequestBody KnowledgeSession session) {
 
@@ -72,8 +70,8 @@ public class SessionController {
             editedSession.setTitle(session.getTitle());
             editedSession.setVotes(session.getVotes());
             return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
+

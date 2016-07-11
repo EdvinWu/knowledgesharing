@@ -3,7 +3,7 @@ package lv.ctco;
 import org.springframework.http.HttpStatus;
 
 public class Consts {
-    public static final String SESSION_PATH = "/session";
+    public static final String SESSION_PATH = "/sessions";
     public static final String FEEDBACK_PATH = "/feedback";
     public static final String JSON = "application/json";
     public static final String SCHEDULED_PATH = "/scheduled";
