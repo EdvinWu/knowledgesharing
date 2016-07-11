@@ -70,7 +70,9 @@ public class KnowledgeSession {
     }
 
     public void setFeedbacks(List<Feedback> feedbacks) {
-        this.feedbacks = feedbacks;
+        this.feedbacks.clear();
+        if (feedbacks != null)
+            this.feedbacks.addAll(feedbacks);
     }
 
     public List<Person> getUsers() {
@@ -79,5 +81,19 @@ public class KnowledgeSession {
 
     public void setUsers(List<Person> users) {
         this.users = users;
+    }
+
+    //TODO
+    public boolean removeFeedback(long feedbackID) {
+        return false;
+    }
+
+    //TODO
+    public void addFeedback(Feedback feedback) {
+
+    }
+    //TODO
+    public boolean updateFeedback(Feedback feedback) {
+        return false;
     }
 }
