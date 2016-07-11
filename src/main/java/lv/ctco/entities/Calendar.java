@@ -2,5 +2,5 @@ package lv.ctco.entities;
 
 public class Calendar {
 
-    List<Session>
+    private List<KnowledgeSession> knowledgeSessionList;
 }
