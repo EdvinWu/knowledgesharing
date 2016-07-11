@@ -47,7 +47,7 @@ public class Calendar {
                 .filter(s -> s.getId() == id)
                 .findAny();
         if (sessionToUpdate.isPresent()) {
-            sessionToUpdate.get().setSessionName(scheduledSession.getSessionName());
+            sessionToUpdate.get().setSession(scheduledSession.getSession());
             return true;
         }
         return false;

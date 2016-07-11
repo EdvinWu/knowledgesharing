@@ -1,10 +1,9 @@
 package lv.ctco.entities;
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import org.apache.catalina.Session;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -13,10 +12,11 @@ public class ScheduledSession {
     @Id
     @GeneratedValue
     private long id;
-    private String sessionName;
+    @OneToOne
+    private KnowledgeSession session;
     private String place;
     @Column(nullable = false)
-    private LocalDateTime date;
+    private String date = LocalDateTime.now().toString();
 
     public long getId() {
         return id;
@@ -26,12 +26,12 @@ public class ScheduledSession {
         this.id = id;
     }
 
-    public String getSessionName() {
-        return sessionName;
+    public KnowledgeSession getSession() {
+        return session;
     }
 
-    public void setSessionName(String sessionName) {
-        this.sessionName = sessionName;
+    public void setSession(KnowledgeSession session) {
+        this.session = session;
     }
 
     public String getPlace() {
@@ -42,11 +42,11 @@ public class ScheduledSession {
         this.place = place;
     }
 
-    public LocalDateTime getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(String date) {
         this.date = date;
     }
 }
