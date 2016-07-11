@@ -4,7 +4,8 @@ import org.springframework.http.HttpStatus;
 
 public class Consts {
     public static final String SESSION_PATH = "/session";
-    public static final String JSON = "/session";
+    public static final String JSON = "application/json";
+    public static final String SCHEDULED_PATH = "/scheduled";
     public static final int OK = HttpStatus.OK.value();
     public static final int NOT_FOUND = HttpStatus.NOT_FOUND.value();
     public static final int CREATED = HttpStatus.CREATED.value();
