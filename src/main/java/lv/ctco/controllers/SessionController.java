@@ -13,8 +13,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.transaction.Transactional;
 import java.util.List;
 
+import static lv.ctco.Consts.*;
+
 @RestController
-@RequestMapping("/session")
+@RequestMapping(SESSION_PATH)
 public class SessionController {
 
     @Autowired
@@ -41,7 +43,7 @@ public class SessionController {
         sessionRepository.save(session);
 
         UriComponents uriComponents =
-                b.path("/session/{id}").buildAndExpand(session.getId());
+                b.path(SESSION_PATH + "/{id}").buildAndExpand(session.getId());
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.setLocation(uriComponents.toUri());

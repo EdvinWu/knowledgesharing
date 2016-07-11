@@ -3,6 +3,7 @@ package lv.ctco.controllers;
 import io.restassured.RestAssured;
 import io.restassured.http.Headers;
 import io.restassured.parsing.Parser;
+import lv.ctco.Consts;
 import lv.ctco.KnowledgeSharingApplication;
 import lv.ctco.entities.KnowledgeSession;
 import org.junit.Before;
@@ -21,15 +22,13 @@ import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
+import static lv.ctco.Consts.*;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = KnowledgeSharingApplication.class)
 @WebAppConfiguration
 @IntegrationTest("server.port:8090")
 public class SessionControllerTest {
-
-    public static final int OK = HttpStatus.OK.value();
-    public static final int NOT_FOUND = HttpStatus.NOT_FOUND.value();
-    public static final int CREATED = HttpStatus.CREATED.value();
 
     @Before
     public void before() {
@@ -39,12 +38,12 @@ public class SessionControllerTest {
 
     @Test
     public void testGetAllOK() {
-        get("/session").then().statusCode(OK);
+        get(SESSION_PATH).then().statusCode(OK);
     }
 
     @Test
     public void testGetOneNotFound() {
-        get("/session/-1").then().statusCode(NOT_FOUND);
+        get(SESSION_PATH + "/-1").then().statusCode(NOT_FOUND);
     }
 
     @Test
@@ -54,7 +53,7 @@ public class SessionControllerTest {
         session.setTitle("Snow");
         session.setVotes(0);
 
-        Headers header = given().contentType("application/json").body(session).when().post("/session").getHeaders();
+        Headers header = given().contentType(JSON).body(session).when().post(SESSION_PATH).getHeaders();
         get(header.getValue("Location")).then().body("author", equalTo("John"));
 
     }
@@ -62,8 +61,8 @@ public class SessionControllerTest {
     @Test
     public void testPostCreated() {
         KnowledgeSession session = new KnowledgeSession();
-        given().contentType("application/json").body(session)
-                .when().post("/session")
+        given().contentType(JSON).body(session)
+                .when().post(SESSION_PATH)
                 .then().statusCode(CREATED);
     }
 
@@ -74,13 +73,13 @@ public class SessionControllerTest {
         session.setTitle("Snow");
         session.setVotes(0);
 
-        Headers header = given().contentType("application/json").body(session).when().post("/session").getHeaders();
+        Headers header = given().contentType(JSON).body(session).when().post(SESSION_PATH).getHeaders();
         delete(header.getValue("Location")).then().statusCode(OK);
     }
 
     @Test
     public void testDeleteNotFound() {
-        delete("/session/-1").then().statusCode(NOT_FOUND);
+        delete(Consts.SESSION_PATH + "/ -1").then().statusCode(NOT_FOUND);
     }
 
     @Test
@@ -91,13 +90,13 @@ public class SessionControllerTest {
         session.setVotes(0);
 
 
-        Headers header = given().contentType("application/json").body(session)
-                .when().post("/session/").getHeaders();
+        Headers header = given().contentType(JSON).body(session)
+                .when().post(SESSION_PATH).getHeaders();
 
         session.setAuthor("Joe");
         session.setTitle("XO");
         session.setVotes(0);
-        given().contentType("application/json").body(session)
+        given().contentType(JSON).body(session)
                 .when().put(header.getValue("Location"))
                 .then().statusCode(OK);
     }
@@ -105,8 +104,8 @@ public class SessionControllerTest {
     @Test
     public void testPutFails() {
         KnowledgeSession student = new KnowledgeSession();
-        given().contentType("application/json").body(student)
-                .when().put("session/-1")
+        given().contentType(JSON).body(student)
+                .when().put(SESSION_PATH + "/ -1")
                 .then().statusCode(NOT_FOUND);
     }
 

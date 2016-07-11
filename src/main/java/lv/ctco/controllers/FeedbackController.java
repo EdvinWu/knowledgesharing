@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static lv.ctco.Consts.*;
 @RestController
-@RequestMapping("/session")
+@RequestMapping(SESSION_PATH)
 public class FeedbackController {
 
     @Autowired

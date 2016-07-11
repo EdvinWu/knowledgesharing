@@ -14,15 +14,13 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import static io.restassured.RestAssured.given;
+import static lv.ctco.Consts.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = KnowledgeSharingApplication.class)
 @WebAppConfiguration
 @IntegrationTest("server.port:8090")
 public class PersonControllerTest {
-
-    public static final int OK = HttpStatus.OK.value();
-    public static final int BAD_REQUEST = HttpStatus.BAD_REQUEST.value();
 
     @Before
     public void before() {
@@ -36,7 +34,7 @@ public class PersonControllerTest {
         person.setUserName("johnes123");
         person.setPassword("1234DDD");
 
-        given().contentType("application/json").body(person).when().post("/register").then().statusCode(BAD_REQUEST);
+        given().contentType(JSON).body(person).when().post("/register").then().statusCode(BAD_REQUEST);
 
     }
 }
