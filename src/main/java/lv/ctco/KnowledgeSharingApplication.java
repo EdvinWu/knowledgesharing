@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class KnowledgeSharingApplication2 {
+public class KnowledgeSharingApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(KnowledgeSharingApplication2.class, args);
+		SpringApplication.run(KnowledgeSharingApplication.class, args);
 	}
 }
