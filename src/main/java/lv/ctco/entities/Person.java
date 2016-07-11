@@ -3,8 +3,11 @@ package lv.ctco.entities;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.List;
+
 @Entity
+@Table(name = "User")
 public class Person {
     @Id
     @GeneratedValue
