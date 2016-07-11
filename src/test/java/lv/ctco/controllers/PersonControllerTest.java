@@ -5,6 +5,7 @@ import io.restassured.http.Headers;
 import io.restassured.parsing.Parser;
 import lv.ctco.KnowledgeSharingApplication;
 import lv.ctco.entities.Person;
+import lv.ctco.entities.ScheduledSession;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,9 +14,12 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.time.LocalDateTime;
+
+import static io.restassured.RestAssured.delete;
 import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
-import static lv.ctco.Consts.JSON;
+import static lv.ctco.Consts.*;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 
@@ -41,6 +45,66 @@ public class PersonControllerTest {
         Headers header = given().contentType(JSON).body(person).when().post("/register/").getHeaders();
         get(header.getValue("Location")).then().body("password", equalTo("1234DDD"));
 
+    }
+
+    @Test
+    public void testPostOK() {
+        Person person = new Person();
+        person.setUserName("notAName");
+        person.setFullName("John Snow");
+
+        given().contentType(JSON).body(person).when().post("/register/").then().statusCode(CREATED);
 
     }
+
+    @Test
+    public void testGetByIdFailed() {
+        get("/person"+FALLING_ID).then().statusCode(NOT_FOUND);
+
+    }
+
+    @Test
+    public void testPostFailed() {
+        Person person = new Person();
+        person.setUserName("notAName");
+        person.setFullName("John Snow");
+        given().contentType(JSON).body(person).when().post("/register/").then().statusCode(CREATED);
+        given().contentType(JSON).body(person).when().post("/register/").then().statusCode(BAD_REQUEST);
+
+    }
+    @Test
+    public void testDeleteOK() {
+        Person person = new Person();
+        person.setUserName("ULTRAUSER");
+
+        Headers header = given().contentType(JSON).body(person).when().post().getHeaders();
+        get(header.getValue("Location")).then().body("userName", equalTo("ULTRAUSER"));
+        delete(header.getValue("Location")).then().statusCode(OK);
+
+    }
+
+    @Test
+    public void testDeleteFailed() {
+        delete("/person"+FALLING_ID).then().statusCode(NOT_FOUND);
+
+    }
+
+    @Test
+    public void testPutOK() {
+        Person person = new Person();
+        person.setUserName("notAName");
+        person.setFullName("John Snow");
+
+
+        Headers header = given().contentType(JSON).body(person)
+                .when().post(REGISTER_PATH).getHeaders();
+
+        person.setFullName("Mother");
+
+        given().contentType(JSON).body(person)
+                .when().put(header.getValue("Location"))
+                .then().statusCode(OK);
+    }
+
+
 }

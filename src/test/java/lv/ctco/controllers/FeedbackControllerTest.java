@@ -7,6 +7,7 @@ import lv.ctco.KnowledgeSharingApplication;
 import lv.ctco.entities.Feedback;
 import lv.ctco.entities.KnowledgeSession;
 import lv.ctco.entities.Person;
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -63,15 +64,22 @@ public class FeedbackControllerTest {
         Feedback feedback = new Feedback();
         feedback.setComment("Comment");
         feedback.setRating(10);
-        session.addFeedback(feedback);
+        //session.addFeedback(feedback);
 
-        Headers header = given()
+       Headers sessionHeader = given().
+               contentType(JSON)
+               .body(session)
+               .when()
+               .post(SESSION_PATH).getHeaders();
+
+        Headers feedbackHeader = given()
                 .contentType(JSON)
-                .body(session)
+                .body(feedback)
                 .when()
-                .post(feedback.getId() + FEEDBACK_PATH).getHeaders();
+                .post(sessionHeader.getValue("Location") + FEEDBACK_PATH).getHeaders();
 
-        get(header.getValue("Location")).then().statusCode(OK);
+
+        get(feedbackHeader.getValue("Location")).then().statusCode(OK).and().body("comment", equalTo("Comment"));
 
     }
 

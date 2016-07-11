@@ -32,7 +32,6 @@ public class FeedbackController {
                 Feedback feedback = feedbackRepository.findOne(feedbackID);
                 return new ResponseEntity<>(feedback, HttpStatus.OK);
             }
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -57,8 +56,7 @@ public class FeedbackController {
             feedbackRepository.save(feedback);
             sessionRepository.save(session);
             UriComponents uriComponents =
-                    b.path("/{id}" + FEEDBACK_PATH +"/"+ feedback.getId()).buildAndExpand(session.getId());
-
+                    b.path(SESSION_PATH + "/{id}" + FEEDBACK_PATH + "/" + feedback.getId()).buildAndExpand(session.getId());
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.setLocation(uriComponents.toUri());
 

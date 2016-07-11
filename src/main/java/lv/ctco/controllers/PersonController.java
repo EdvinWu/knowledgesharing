@@ -37,21 +37,21 @@ public class PersonController {
 
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.setLocation(uriComponents.toUri());
-            return new ResponseEntity<>(responseHeaders,HttpStatus.OK);
+            return new ResponseEntity<>(responseHeaders, HttpStatus.CREATED);
         }
     }
 
     @RequestMapping(path = "person/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> getPerson(@PathVariable("id") long id) {
         if (personRepository.exists(id)) {
-            personRepository.findOne(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            Person person = personRepository.findOne(id);
+            return new ResponseEntity<>(person, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 
-    @RequestMapping(path = "person/", method = RequestMethod.GET)
+    @RequestMapping(path = "person", method = RequestMethod.GET)
     public ResponseEntity<?> getAllPersons() {
         List<Person> personList = personRepository.findAll();
         return new ResponseEntity<>(personList, HttpStatus.OK);
@@ -68,7 +68,7 @@ public class PersonController {
     }
 
     @Transactional
-    @RequestMapping(path = " /{id}/", method = RequestMethod.PUT)
+    @RequestMapping(path = "/person/{id}", method = RequestMethod.PUT)
     public ResponseEntity<?> updateStudentByID(@PathVariable("id") long id,
                                                @RequestBody Person person) {
 
@@ -76,9 +76,9 @@ public class PersonController {
             Person editedPerson = personRepository.findOne(id);
             editedPerson.setFullName(person.getFullName());
             return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
     }
 
 

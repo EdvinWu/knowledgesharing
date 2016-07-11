@@ -39,11 +39,11 @@ public class ScheduledSessionController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> addSession(@RequestBody ScheduledSession session, UriComponentsBuilder b) {
-        scheduledSessionRepository.save(session);
+    public ResponseEntity<?> addSession(@RequestBody ScheduledSession scheduledSession, UriComponentsBuilder b) {
+        scheduledSessionRepository.save(scheduledSession);
 
         UriComponents uriComponents =
-                b.path(SCHEDULED_PATH + "/{id}").buildAndExpand(session.getId());
+                b.path(SCHEDULED_PATH + "/{id}").buildAndExpand(scheduledSession.getId());
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.setLocation(uriComponents.toUri());
