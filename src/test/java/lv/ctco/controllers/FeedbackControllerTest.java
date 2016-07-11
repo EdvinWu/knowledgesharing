@@ -59,27 +59,19 @@ public class FeedbackControllerTest {
         session.setTitle("Snow");
         session.setVotes(0);
 
-        List<Feedback> feedbacks = new ArrayList<>();
+
         Feedback feedback = new Feedback();
         feedback.setComment("Comment");
         feedback.setRating(10);
-        feedbacks.add(feedback);
-        session.setFeedbacks(feedbacks);
+        session.addFeedback(feedback);
 
         Headers header = given()
                 .contentType(JSON)
                 .body(session)
                 .when()
-                .post(SESSION_PATH).getHeaders();
+                .post(feedback.getId() + FEEDBACK_PATH).getHeaders();
 
-        Headers header1 = given()
-                .contentType(JSON)
-                .body(feedback)
-                .when()
-                .post("/" + session.getId() + FEEDBACK_PATH).getHeaders();
-
-
-        get(header.getValue("Location") + header1.getValue("Location")).then().statusCode(OK);
+        get(header.getValue("Location")).then().statusCode(OK);
 
     }
 

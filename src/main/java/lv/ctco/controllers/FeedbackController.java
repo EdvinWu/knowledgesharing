@@ -50,16 +50,17 @@ public class FeedbackController {
     }
 
     @Transactional
-    @RequestMapping(path = "{id}" + FEEDBACK_PATH, method = RequestMethod.POST)
+    @RequestMapping(path = "/{id}" + FEEDBACK_PATH, method = RequestMethod.POST)
     public ResponseEntity<?> addFeedback(@PathVariable("id") long id,
                                          @RequestBody Feedback feedback,
                                          UriComponentsBuilder b) {
         if (sessionRepository.exists(id)) {
             KnowledgeSession session = sessionRepository.findOne(id);
             session.addFeedback(feedback);
+            feedbackRepository.save(feedback);
             sessionRepository.save(session);
             UriComponents uriComponents =
-                    b.path("{id}" + FEEDBACK_PATH).buildAndExpand(session.getId());
+                    b.path("/{id}" + FEEDBACK_PATH +"/"+ feedback.getId()).buildAndExpand(session.getId());
 
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.setLocation(uriComponents.toUri());
