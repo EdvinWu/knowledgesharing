@@ -12,18 +12,18 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import lv.ctco.Consts;
+
 
 import static io.restassured.RestAssured.*;
+import static lv.ctco.Consts.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = KnowledgeSharingApplication.class)
 @WebAppConfiguration
 @IntegrationTest("server.port:8090")
 
-public class FeedbackControllerTests {
-    public static final int OK = HttpStatus.OK.value();
-    public static final int NOT_FOUND = HttpStatus.NOT_FOUND.value();
-    public static final int CREATED = HttpStatus.CREATED.value();
+public class FeedbackControllerTest {
 
 
     @Before
@@ -35,8 +35,12 @@ public class FeedbackControllerTests {
 
     @Test
     public void testSessionAccessToFeedback() throws Exception {
-        get("/session/-1/feedback").then().statusCode(NOT_FOUND);
+        get(SESSION_PATH+FALLING_ID+FEEDBACK_PATH).then().statusCode(NOT_FOUND);
     }
 
+    @Test
+    public void testGetAllOK() {
+        get(SESSION_PATH+FEEDBACK_PATH).then().statusCode(OK);
+    }
 
 }

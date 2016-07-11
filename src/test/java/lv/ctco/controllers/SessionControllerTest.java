@@ -43,7 +43,7 @@ public class SessionControllerTest {
 
     @Test
     public void testGetOneNotFound() {
-        get(SESSION_PATH + "/-1").then().statusCode(NOT_FOUND);
+        get(SESSION_PATH + FALLING_ID).then().statusCode(NOT_FOUND);
     }
 
     @Test
@@ -79,7 +79,7 @@ public class SessionControllerTest {
 
     @Test
     public void testDeleteNotFound() {
-        delete(Consts.SESSION_PATH + "/ -1").then().statusCode(NOT_FOUND);
+        delete(Consts.SESSION_PATH + FALLING_ID).then().statusCode(NOT_FOUND);
     }
 
     @Test
@@ -105,7 +105,7 @@ public class SessionControllerTest {
     public void testPutFails() {
         KnowledgeSession student = new KnowledgeSession();
         given().contentType(JSON).body(student)
-                .when().put(SESSION_PATH + "/ -1")
+                .when().put(SESSION_PATH + FALLING_ID)
                 .then().statusCode(NOT_FOUND);
     }
 
