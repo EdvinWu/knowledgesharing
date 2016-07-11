@@ -34,8 +34,9 @@ public class FeedbackControllerTests {
 
 
     @Test
-    public void testSession() throws Exception {
-        get("/session/0/feedback").then().statusCode(NOT_FOUND);
+    public void testSessionAccessToFeedback() throws Exception {
+        get("/session/-1/feedback").then().statusCode(NOT_FOUND);
     }
+
 
 }
