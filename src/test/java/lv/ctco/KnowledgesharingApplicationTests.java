@@ -1,7 +1,9 @@
 package lv.ctco;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -17,15 +19,9 @@ import static org.hamcrest.Matchers.equalTo;
 @SpringApplicationConfiguration(classes = KnowledgeSharingApplication.class)
 @WebAppConfiguration
 public class KnowledgeSharingApplicationTests {
-	public static final int OK = HttpStatus.OK.value();
 
 	@Test
 	public void contextLoads() {
-	}
-
-	@Test
-	public void testGetAllOK() {
-		get("/session").then().statusCode(OK);
 	}
 
 }
