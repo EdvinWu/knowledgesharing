@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.List;
 
+
 @Entity
 public class KnowledgeSession {
 
@@ -14,6 +15,7 @@ public class KnowledgeSession {
     private int id;
     private String title;
     private String author;
+    private int votes;
     private List<String> tags;
     private List<Feedback> feedbacks;
     private List<Person> users;
@@ -40,6 +42,14 @@ public class KnowledgeSession {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public int getVotes() {
+        return votes;
+    }
+
+    public void setVotes(int votes) {
+        this.votes = votes;
     }
 
     public List<String> getTags() {
