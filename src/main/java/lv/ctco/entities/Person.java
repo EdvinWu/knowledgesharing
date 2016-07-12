@@ -15,6 +15,16 @@ public class Person {
     private String password;
     @ManyToMany(mappedBy = "users")
     private List<KnowledgeSession> attended;
+    @OneToMany
+    List<UserRoles> userRoles;
+
+    public List<UserRoles> getUserRoles() {
+        return userRoles;
+    }
+
+    public void setUserRoles(List<UserRoles> userRoles) {
+        this.userRoles = userRoles;
+    }
 
     public long getId() {
         return id;
