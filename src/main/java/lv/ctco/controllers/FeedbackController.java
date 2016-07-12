@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.List;
+import java.util.Optional;
+
 import static lv.ctco.Consts.FEEDBACK_PATH;
 import static lv.ctco.Consts.SESSION_PATH;
 
@@ -67,25 +70,35 @@ public class FeedbackController {
 
     @Transactional
     @RequestMapping(path = "/{id}" + FEEDBACK_PATH + "/{fId}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteFeedback(@PathVariable("id") long id, @PathVariable("fId") long feedbackID) {
+    public ResponseEntity<?> deleteFeedback(@PathVariable("id") long id, @PathVariable("fId") long feedbackID, @CookieValue("personId") long personId) {
         if (sessionRepository.exists(id)) {
             KnowledgeSession session = sessionRepository.findOne(id);
-            if (session.removeFeedback(feedbackID)) {
-                return new ResponseEntity<>(HttpStatus.OK);
+            List<Feedback> feedbacks = session.getFeedbacks();
+            Optional<Feedback> feedback = feedbacks.stream()
+                    .filter(f -> f.getId() == id)
+                    .findAny();
+            if (feedback.get().getPersonID() == personId) {
+                if (session.removeFeedback(feedbackID)) {
+                    return new ResponseEntity<>(HttpStatus.OK);
+                }
             }
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @Transactional
     @RequestMapping(path = "/{id}" + FEEDBACK_PATH + "/{fId}", method = RequestMethod.PUT)
-    public ResponseEntity<?> updateFeedback(@PathVariable("id") long id, @PathVariable("fId") long feedbackID, @RequestBody Feedback feedback) {
+    public ResponseEntity<?> updateFeedback(@PathVariable("id") long id, @PathVariable("fId") long feedbackID, @RequestBody Feedback feedback, @CookieValue("personId") long personId) {
         feedback.setId(feedbackID);
         if (sessionRepository.exists(id)) {
             KnowledgeSession session = sessionRepository.findOne(id);
-            if (session.updateFeedback(feedback)) {
-                return new ResponseEntity<>(HttpStatus.OK);
+            if (feedback.getPersonID() == personId) {
+                if (session.updateFeedback(feedback)) {
+                    return new ResponseEntity<>(HttpStatus.OK);
+                }
             }
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

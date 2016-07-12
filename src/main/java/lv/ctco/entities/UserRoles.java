@@ -1,5 +1,8 @@
 package lv.ctco.entities;
 
+import org.hibernate.annotations.Columns;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -10,6 +13,7 @@ public class UserRoles {
     @GeneratedValue
     private long id;
     private String role;
+    @Column(name = "username")
     private String userName;
 
     public String getUserName() {
