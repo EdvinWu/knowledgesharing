@@ -3,8 +3,10 @@ package lv.ctco.controllers;
 import io.restassured.RestAssured;
 import io.restassured.http.Headers;
 import io.restassured.parsing.Parser;
+import io.restassured.response.ValidatableResponse;
 import lv.ctco.KnowledgeSharingApplication;
 import lv.ctco.entities.KnowledgeSession;
+import lv.ctco.entities.Person;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,35 +41,62 @@ public class DateSessionControllerTest {
 
     @Test
     public void testAddDate() throws Exception {
-        KnowledgeSession kSession = new KnowledgeSession();
+        KnowledgeSession session = new KnowledgeSession();
         LocalDateTime date = LocalDateTime.now();
-      Headers headers =  given()
+        Headers headers =  given()
               .contentType(JSON)
-              .body(kSession)
+              .body(session)
               .when()
               .post(SESSION_PATH)
               .getHeaders();
 
-        given().contentType(JSON).body(date).when().post(headers+DATE_PATH).then().statusCode(CREATED);
+        given().contentType(JSON).body(date).when().post(headers.getValue("Location")+DATE_PATH).then().statusCode(CREATED);
     }
 
     @Test
     public void testGetDate() throws Exception {
-        get(DATE_PATH).then().statusCode(OK);
+        KnowledgeSession session = new KnowledgeSession();
+        LocalDateTime date = LocalDateTime.now();
+        session.setDate(date);
+        Headers headers =  given()
+                .contentType(JSON)
+                .body(session)
+                .when()
+                .post(SESSION_PATH)
+                .getHeaders();
+
+        given().contentType(JSON).body(date).when().get(headers.getValue("Location") + DATE_PATH).then().statusCode(OK);
+
     }
 
     @Test
     public void testUpdateDate() throws Exception {
+        KnowledgeSession session = new KnowledgeSession();
         LocalDateTime date = LocalDateTime.now();
-        given().contentType(JSON).body(date).when().put(DATE_PATH).then().statusCode(CREATED);
+        LocalDateTime newDate = LocalDateTime.now();
+        Headers headers =  given()
+                .contentType(JSON)
+                .body(session)
+                .when()
+                .post(SESSION_PATH)
+                .getHeaders();
+
+        given().contentType(JSON).body(date).when().post(headers.getValue("Location") + DATE_PATH).then().statusCode(CREATED);
+        given().contentType(JSON).body(newDate).when().put(headers.getValue("Location") + DATE_PATH).then().statusCode(OK);
     }
 
     @Test
     public void testDeleteDate() throws Exception {
+        KnowledgeSession session = new KnowledgeSession();
         LocalDateTime date = LocalDateTime.now();
-        Headers header = given().contentType(JSON).body(date).when().post(REGISTER_PATH).getHeaders();
-        delete(header.getValue("Location")).then().statusCode(OK);
-
+        session.setDate(date);
+        Headers headers =  given()
+                .contentType(JSON)
+                .body(session)
+                .when()
+                .post(SESSION_PATH)
+                .getHeaders();
+        given().contentType(JSON).body(date).when().delete(headers.getValue("Location") + DATE_PATH).then().statusCode(OK);
 
     }
 }
