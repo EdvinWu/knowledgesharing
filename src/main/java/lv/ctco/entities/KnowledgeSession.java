@@ -28,6 +28,8 @@ public class KnowledgeSession {
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private List<Person> users = new ArrayList<>();
 
+    private LocalDateTime date;
+
     public LocalDateTime getDate() {
         return date;
     }
@@ -35,8 +37,6 @@ public class KnowledgeSession {
     public void setDate(LocalDateTime date) {
         this.date = date;
     }
-
-    private LocalDateTime date;
 
     public long getId() {
         return id;

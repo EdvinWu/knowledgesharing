@@ -46,6 +46,7 @@ public class PersonControllerTest {
     public void testPostOK() {
         Person person = new Person();
         person.setUserName("Sherlock");
+        person.setPassword("PW");
         person.setFullName("John Snow");
 
         given().contentType(JSON).body(person).when().post(REGISTER_PATH).then().statusCode(CREATED);
@@ -62,6 +63,7 @@ public class PersonControllerTest {
     public void testPostFailed() {
         Person person = new Person();
         person.setUserName("Watson");
+        person.setPassword("PW");
         person.setFullName("John Snow");
         given().contentType(JSON).body(person).when().post(REGISTER_PATH).then().statusCode(CREATED);
         given().contentType(JSON).body(person).when().post(REGISTER_PATH).then().statusCode(BAD_REQUEST);
@@ -71,6 +73,7 @@ public class PersonControllerTest {
     public void testDeleteOK() {
         Person person = new Person();
         person.setUserName("cannonboy");
+        person.setPassword("PW");
 
         Headers header = given().contentType(JSON).body(person).when().post(REGISTER_PATH).getHeaders();
         get(header.getValue("Location")).then().body("userName", equalTo("cannonboy"));
@@ -88,6 +91,7 @@ public class PersonControllerTest {
     public void testPutOK() {
         Person person = new Person();
         person.setUserName("CREEPY");
+        person.setPassword("PW");
         person.setFullName("John Snow");
 
 
