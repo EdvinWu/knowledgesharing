@@ -9,8 +9,7 @@ public class Feedback {
     @GeneratedValue
     private long id;
     private int rating;
-    @ManyToOne
-    private Person user;
+    private long personID;
     private String comment;
 
     public long getId() {
@@ -29,12 +28,12 @@ public class Feedback {
         this.rating = rating;
     }
 
-    public Person getUser() {
-        return user;
+    public long getPersonID() {
+        return personID;
     }
 
-    public void setUser(Person user) {
-        this.user = user;
+    public void setPersonID(long personID) {
+        this.personID = personID;
     }
 
     public String getComment() {
