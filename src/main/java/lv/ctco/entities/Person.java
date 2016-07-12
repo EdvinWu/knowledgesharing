@@ -11,6 +11,7 @@ public class Person {
     private String fullName;
     @Column(unique=true,nullable = false)
     private String userName;
+    @Column(nullable = false)
     private String password;
     @ManyToMany(mappedBy = "users")
     private List<KnowledgeSession> attended;
