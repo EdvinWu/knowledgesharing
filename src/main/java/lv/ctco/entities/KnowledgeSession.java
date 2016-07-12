@@ -2,6 +2,7 @@ package lv.ctco.entities;
 
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +27,16 @@ public class KnowledgeSession {
             joinColumns = @JoinColumn(name = "session_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private List<Person> users = new ArrayList<>();
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    private LocalDateTime date;
 
     public long getId() {
         return id;
@@ -107,4 +118,8 @@ public class KnowledgeSession {
         }
         return false;
     }
+    public void deleteDate(){
+       date = null;
+    }
+
 }
