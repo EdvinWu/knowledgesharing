@@ -15,8 +15,6 @@ public class Person {
     private String password;
     @ManyToMany(mappedBy = "users")
     private List<KnowledgeSession> attended;
-    @OneToOne
-    private Calendar calendar;
 
     public long getId() {
         return id;
@@ -58,11 +56,5 @@ public class Person {
         this.attended = attended;
     }
 
-    public Calendar getCalendar() {
-        return calendar;
-    }
 
-    public void setCalendar(Calendar calendar) {
-        this.calendar = calendar;
-    }
 }
