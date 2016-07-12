@@ -19,12 +19,13 @@ public class DateSessionController {
     @Autowired
     SessionRepository sessionRepository;
 
-    @RequestMapping(path ="/{id}/date", method = RequestMethod.POST)
+    @Transactional
+    @RequestMapping(path = "/{id}/date", method = RequestMethod.POST)
     public ResponseEntity<?> addDate(@PathVariable("id") long id,
-                                     @RequestBody LocalDateTime date) {
+                                        @RequestBody LocalDateTime date) {
         if (sessionRepository.exists(id)){
             sessionRepository.findOne(id).setDate(date);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
