@@ -11,6 +11,8 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.time.LocalDateTime;
+
 import static io.restassured.RestAssured.given;
 import static lv.ctco.Consts.*;
 import static org.junit.Assert.*;
@@ -31,10 +33,9 @@ public class DateSessionControllerTest {
 
     @Test
     public void testAddDate() throws Exception {
-        
-
-        given().contentType(JSON).body(date).when().post(REGISTER_PATH).then().statusCode(CREATED);
-        given().contentType(JSON).body(person).when().post(REGISTER_PATH).then().statusCode(BAD_REQUEST);
+        LocalDateTime date = LocalDateTime.now();
+        given().contentType(JSON).body(date).when().post(DATE_PATH).then().statusCode(CREATED);
+        given().contentType(JSON).body(date).when().post(DATE_PATH).then().statusCode(NOT_FOUND);
     }
 
     @Test
