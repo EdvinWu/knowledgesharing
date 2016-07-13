@@ -1,6 +1,8 @@
 package lv.ctco.entities;
 
 
+import lv.ctco.enums.SessionStatus;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,6 +20,8 @@ public class KnowledgeSession {
     private String title;
     private String author;
     private int votes;
+    private SessionStatus status;
+    private LocalDateTime date;
     @OneToMany
     private List<Tag> tags = new ArrayList<>();
     @OneToMany
@@ -28,7 +32,17 @@ public class KnowledgeSession {
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private List<Person> users = new ArrayList<>();
 
-    private LocalDateTime date;
+    public KnowledgeSession(){
+        setStatus(status.PENDING);
+    }
+
+    public SessionStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(SessionStatus status) {
+        this.status = status;
+    }
 
     public LocalDateTime getDate() {
         return date;

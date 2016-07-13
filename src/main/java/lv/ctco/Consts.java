@@ -13,5 +13,5 @@ public class Consts {
     public static final int CREATED = HttpStatus.CREATED.value();
     public static final int BAD_REQUEST = HttpStatus.BAD_REQUEST.value();
     public static final String DATE_PATH ="/date";
-
+    public static final String TAG_PATH = "/tag";
 }

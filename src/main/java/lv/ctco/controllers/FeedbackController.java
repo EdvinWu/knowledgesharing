@@ -60,10 +60,10 @@ public class FeedbackController {
             sessionRepository.save(session);
             UriComponents uriComponents =
                     b.path(SESSION_PATH + "/{id}" + FEEDBACK_PATH + "/" + feedback.getId()).buildAndExpand(session.getId());
-            HttpHeaders responseHeaders = new HttpHeaders();
+           HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.setLocation(uriComponents.toUri());
 
-            return new ResponseEntity<>(responseHeaders, HttpStatus.CREATED);
+            return new ResponseEntity<>(HttpStatus.CREATED);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
