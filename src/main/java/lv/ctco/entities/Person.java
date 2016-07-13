@@ -13,7 +13,7 @@ public class Person {
     @GeneratedValue
     private long id;
     private String fullName;
-    @Column(name = "username",unique=true,nullable = false)
+    @Column(name = "username")
     private String userName;
     @Column(name = "pass", nullable = false)
     private String password;
