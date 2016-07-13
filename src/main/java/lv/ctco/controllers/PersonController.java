@@ -41,7 +41,7 @@ public class PersonController {
             UserRoles userRoles = new UserRoles();
             userRoles.setRole("USER");
             person.setUserRoles(Arrays.asList(userRoles));
-           person.setPassword(passwordEncoder.encode(person.getPassword()));
+            person.setPassword(passwordEncoder.encode(person.getPassword()));
             personRepository.save(person);
             UriComponents uriComponents =
                     b.path("/person/{id}").buildAndExpand(person.getId());
@@ -53,12 +53,15 @@ public class PersonController {
     }
 
     @RequestMapping(path = "adduser/", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
-        public ResponseEntity<?> userAdd(@RequestParam Person persond) {
-                Person person = new Person();
-                person.setUserName(persond.getUserName());
-                person.setPassword(persond.getPassword());
-                personRepository.save(person);
-                return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<?> userAdd(@RequestParam String username, String password) {
+        Person person = new Person();
+        person.setUserName(username);
+        person.setPassword(passwordEncoder.encode(password));
+        UserRoles userRoles = new UserRoles();
+        userRoles.setRole("USER");
+        person.setUserRoles(Arrays.asList(userRoles));
+        personRepository.save(person);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @RequestMapping(path = "person/{id}", method = RequestMethod.GET)
