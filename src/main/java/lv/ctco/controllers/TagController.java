@@ -5,15 +5,13 @@ import lv.ctco.entities.Tag;
 import lv.ctco.repository.SessionRepository;
 import lv.ctco.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
+import java.util.Optional;
 
 import static lv.ctco.Consts.TAG_PATH;
 import static lv.ctco.Consts.SESSION_PATH;
@@ -34,7 +32,7 @@ public class TagController {
         return new ResponseEntity<>(tagList, HttpStatus.OK);
     }
 
-   /* @Transactional
+    @Transactional
     @RequestMapping(path = "/{id}"+ TAG_PATH, method = RequestMethod.POST)
     public ResponseEntity<?> addTag(@PathVariable("id") long id,
                                          @RequestBody Tag tag){
@@ -48,5 +46,25 @@ public class TagController {
             return new ResponseEntity<>(HttpStatus.CREATED);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }*/
+    }
+
+    @Transactional
+    @RequestMapping(path = "/{id}" + TAG_PATH + "/{sId}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteTag(@PathVariable("id") long id, @PathVariable("sId") long tagID) {
+        if (sessionRepository.exists(id)) {
+            KnowledgeSession session = sessionRepository.findOne(id);
+            List<Tag> tags = session.getTags();
+            Optional<Tag> tag = tags.stream()
+                    .filter(t -> t.getId() == id)
+                    .findAny();
+            if (tag != null) {
+                if (session.removeTag(tagID)) {
+                    return new ResponseEntity<>(HttpStatus.OK);
+                }
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
 }

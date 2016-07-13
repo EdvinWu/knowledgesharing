@@ -42,8 +42,8 @@ public class FeedbackController {
     @RequestMapping(path = "/{id}" + FEEDBACK_PATH, method = RequestMethod.GET)
     public ResponseEntity<?> getAllSessionFeedback(@PathVariable("id") long id) {
         if (sessionRepository.exists(id)) {
-            feedbackRepository.findAll();
-            return new ResponseEntity<>(HttpStatus.OK);
+            List<Feedback> feedbacks = feedbackRepository.findAll();
+            return new ResponseEntity<>(feedbacks, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -60,7 +60,7 @@ public class FeedbackController {
             sessionRepository.save(session);
             UriComponents uriComponents =
                     b.path(SESSION_PATH + "/{id}" + FEEDBACK_PATH + "/" + feedback.getId()).buildAndExpand(session.getId());
-           HttpHeaders responseHeaders = new HttpHeaders();
+            HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.setLocation(uriComponents.toUri());
 
             return new ResponseEntity<>(HttpStatus.CREATED);
@@ -70,35 +70,28 @@ public class FeedbackController {
 
     @Transactional
     @RequestMapping(path = "/{id}" + FEEDBACK_PATH + "/{fId}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteFeedback(@PathVariable("id") long id, @PathVariable("fId") long feedbackID, @CookieValue("personId") long personId) {
+    public ResponseEntity<?> deleteFeedback(@PathVariable("id") long id, @PathVariable("fId") long feedbackID) {
         if (sessionRepository.exists(id)) {
             KnowledgeSession session = sessionRepository.findOne(id);
-            List<Feedback> feedbacks = session.getFeedbacks();
-            Optional<Feedback> feedback = feedbacks.stream()
-                    .filter(f -> f.getId() == id)
-                    .findAny();
-            if (feedback.get().getPersonID() == personId) {
-                if (session.removeFeedback(feedbackID)) {
-                    return new ResponseEntity<>(HttpStatus.OK);
-                }
+            if (feedbackRepository.exists(feedbackID)) {
+                feedbackRepository.delete(feedbackID);
+                sessionRepository.save(session);
+                return new ResponseEntity<>(HttpStatus.OK);
             }
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @Transactional
     @RequestMapping(path = "/{id}" + FEEDBACK_PATH + "/{fId}", method = RequestMethod.PUT)
-    public ResponseEntity<?> updateFeedback(@PathVariable("id") long id, @PathVariable("fId") long feedbackID, @RequestBody Feedback feedback, @CookieValue("personId") long personId) {
+    public ResponseEntity<?> updateFeedback(@PathVariable("id") long id, @PathVariable("fId") long feedbackID,
+                                            @RequestBody Feedback feedback) {
         feedback.setId(feedbackID);
         if (sessionRepository.exists(id)) {
             KnowledgeSession session = sessionRepository.findOne(id);
-            if (feedback.getPersonID() == personId) {
-                if (session.updateFeedback(feedback)) {
-                    return new ResponseEntity<>(HttpStatus.OK);
-                }
-            }
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            feedbackRepository.save(feedback);
+            sessionRepository.save(session);
+            return new ResponseEntity<>("text", HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

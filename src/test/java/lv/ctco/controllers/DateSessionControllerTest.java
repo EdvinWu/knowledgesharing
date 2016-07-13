@@ -3,10 +3,8 @@ package lv.ctco.controllers;
 import io.restassured.RestAssured;
 import io.restassured.http.Headers;
 import io.restassured.parsing.Parser;
-import io.restassured.response.ValidatableResponse;
 import lv.ctco.KnowledgeSharingApplication;
 import lv.ctco.entities.KnowledgeSession;
-import lv.ctco.entities.Person;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,11 +15,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.time.LocalDateTime;
 
-import static io.restassured.RestAssured.delete;
-import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
 import static lv.ctco.Consts.*;
-import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = KnowledgeSharingApplication.class)
