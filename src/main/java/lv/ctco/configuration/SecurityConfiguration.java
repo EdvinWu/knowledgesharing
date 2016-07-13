@@ -39,7 +39,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 //        httpSecurity.headers().frameOptions().disable();
 
         httpSecurity.authorizeRequests()
-                            .antMatchers("/person/**").authenticated().and()
+                            .antMatchers("/person/**").authenticated().and().formLogin()
+                .loginPage("/login.html")
+                .permitAll().and()
                 .httpBasic().and()
                 .logout().logoutSuccessUrl("/login?logout").and()
                 .csrf().disable();
@@ -50,6 +52,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+
 
 
     @Autowired
