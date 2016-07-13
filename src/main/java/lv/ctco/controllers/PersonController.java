@@ -51,6 +51,15 @@ public class PersonController {
         }
     }
 
+    @RequestMapping(path = "adduser/", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
+        public ResponseEntity<?> userAdd(@RequestParam Person persond) {
+                Person person = new Person();
+                person.setUserName(persond.getUserName());
+                person.setPassword(persond.getPassword());
+                personRepository.save(person);
+                return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
     @RequestMapping(path = "person/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> getPerson(@PathVariable("id") long id) {
         if (personRepository.exists(id)) {
