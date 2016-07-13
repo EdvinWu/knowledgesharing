@@ -1,4 +1,4 @@
-package lv.ctco.controllers;
+package lv.ctco;
 
 import org.h2.server.web.WebServlet;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;

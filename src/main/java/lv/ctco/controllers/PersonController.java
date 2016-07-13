@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
@@ -21,6 +22,8 @@ public class PersonController {
     @Autowired
     PersonRepository personRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @RequestMapping(path = "register/", method = RequestMethod.POST)
     public ResponseEntity<?> registerPerson(@RequestBody Person person, UriComponentsBuilder b) {
@@ -31,6 +34,7 @@ public class PersonController {
         if (ifExists.isPresent()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else {
+           person.setPassword(passwordEncoder.encode(person.getPassword()));
             personRepository.save(person);
             UriComponents uriComponents =
                     b.path("/person/{id}").buildAndExpand(person.getId());
