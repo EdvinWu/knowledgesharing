@@ -27,17 +27,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-//        httpSecurity.authorizeRequests()
-//                        .antMatchers("/").permitAll().and()
-//                    .authorizeRequests().antMatchers("/sessions").access("hasRole('ROLE_ADMIN')").and()
-//                    .authorizeRequests().antMatchers("/person").authenticated().and()
-//                    .authorizeRequests().antMatchers("/console/**").permitAll()
-//                .and().httpBasic()
-//                .and().logout().logoutSuccessUrl("/login?logout")
-//                .and().exceptionHandling().accessDeniedPage("/403")
-//                .and().csrf().disable();
-//        httpSecurity.headers().frameOptions().disable();
-
         httpSecurity.authorizeRequests()
                             .antMatchers("/person/**").authenticated().and().formLogin()
                 .loginPage("/login.html")

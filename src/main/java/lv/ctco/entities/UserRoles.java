@@ -1,7 +1,6 @@
 package lv.ctco.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import org.hibernate.annotations.Columns;
 
 import javax.persistence.*;
 

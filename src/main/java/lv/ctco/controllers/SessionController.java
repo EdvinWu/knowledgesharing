@@ -1,7 +1,6 @@
 package lv.ctco.controllers;
 
 import lv.ctco.entities.KnowledgeSession;
-import lv.ctco.entities.Tag;
 import lv.ctco.repository.SessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;

@@ -22,7 +22,7 @@ public class KnowledgeSession {
     private int votes;
     private SessionStatus status;
     private LocalDateTime date;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Tag> tags = new ArrayList<>();
     @OneToMany
     private List<Feedback> feedbacks = new ArrayList<>();
@@ -136,4 +136,10 @@ public class KnowledgeSession {
        date = null;
     }
 
+    public boolean removeTag(long tagID) {
+        Optional<Tag> tag = tags.stream()
+                .filter(t -> t.getId() == id)
+                .findAny();
+        return tag.isPresent() && tags.remove(tag.get());
+    }
 }
