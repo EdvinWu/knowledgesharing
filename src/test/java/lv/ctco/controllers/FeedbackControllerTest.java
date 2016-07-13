@@ -6,21 +6,14 @@ import io.restassured.parsing.Parser;
 import lv.ctco.KnowledgeSharingApplication;
 import lv.ctco.entities.Feedback;
 import lv.ctco.entities.KnowledgeSession;
-import lv.ctco.entities.Person;
-import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import lv.ctco.Consts;
 
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static io.restassured.RestAssured.*;
 import static lv.ctco.Consts.*;

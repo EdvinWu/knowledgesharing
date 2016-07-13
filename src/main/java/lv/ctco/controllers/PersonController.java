@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -50,6 +49,15 @@ public class PersonController {
             responseHeaders.setLocation(uriComponents.toUri());
             return new ResponseEntity<>(responseHeaders, HttpStatus.CREATED);
         }
+    }
+
+    @RequestMapping(path = "adduser/", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
+        public ResponseEntity<?> userAdd(@RequestParam Person persond) {
+                Person person = new Person();
+                person.setUserName(persond.getUserName());
+                person.setPassword(persond.getPassword());
+                personRepository.save(person);
+                return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @RequestMapping(path = "person/{id}", method = RequestMethod.GET)

@@ -34,13 +34,6 @@ import java.util.UUID;
         @Override
         public void onApplicationEvent(final ContextRefreshedEvent event) {
 
-            Tag tag = new Tag();
-            tag.setName("DDD");
-            tagRepository.save(tag);
-
-            List<Tag> tags = new ArrayList<>();
-            tags.add(tag);
-
             Person person = new Person();
             person.setFullName(UUID.randomUUID().toString());
             person.setPassword("0000");
@@ -52,7 +45,7 @@ import java.util.UUID;
             session.setTitle("Title");
             session.setDate(null);
             session.setVotes(5);
-            session.setTags(tags);
+            //session.setTags(tags);
             sessionRepository.save(session);
         }
     }
