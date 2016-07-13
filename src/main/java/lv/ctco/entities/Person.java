@@ -1,9 +1,13 @@
 package lv.ctco.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "persons")
 public class Person {
     @Id
     @GeneratedValue
@@ -11,19 +15,23 @@ public class Person {
     private String fullName;
     @Column(name = "username",unique=true,nullable = false)
     private String userName;
-    @Column(nullable = false)
+    @Column(name = "pass", nullable = false)
     private String password;
     @ManyToMany(mappedBy = "users")
     private List<KnowledgeSession> attended;
-    @OneToMany
-    List<UserRoles> userRoles;
+    @JsonManagedReference
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
+    private List<UserRoles> userRoles = new ArrayList<>();
 
     public List<UserRoles> getUserRoles() {
         return userRoles;
     }
 
     public void setUserRoles(List<UserRoles> userRoles) {
-        this.userRoles = userRoles;
+        if (userRoles == null) return;
+        this.userRoles.clear();
+        this.userRoles.addAll(userRoles);
+        userRoles.forEach(u -> u.setPerson(this));
     }
 
     public long getId() {

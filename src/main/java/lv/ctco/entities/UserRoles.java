@@ -1,27 +1,29 @@
 package lv.ctco.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.Columns;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
+@Table(name = "user_roles")
 public class UserRoles {
     @Id
     @GeneratedValue
     private long id;
+    @Column(name = "user_role")
     private String role;
-    @Column(name = "username")
-    private String userName;
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "personfk",referencedColumnName = "id")
+    private Person person;
 
-    public String getUserName() {
-        return userName;
+    public Person getPerson() {
+        return person;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setPerson(Person person) {
+        this.person = person;
     }
 
     public long getId() {

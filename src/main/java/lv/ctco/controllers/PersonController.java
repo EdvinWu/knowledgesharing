@@ -1,6 +1,7 @@
 package lv.ctco.controllers;
 
 import lv.ctco.entities.Person;
+import lv.ctco.entities.UserRoles;
 import lv.ctco.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,8 +25,8 @@ public class PersonController {
     @Autowired
     PersonRepository personRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
 
     @RequestMapping(path = "register/", method = RequestMethod.POST)
     public ResponseEntity<?> registerPerson(@RequestBody Person person, UriComponentsBuilder b) {
@@ -34,7 +37,10 @@ public class PersonController {
         if (ifExists.isPresent()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else {
-           person.setPassword(passwordEncoder.encode(person.getPassword()));
+            UserRoles userRoles = new UserRoles();
+            userRoles.setRole("USER");
+            person.setUserRoles(Arrays.asList(userRoles));
+//           person.setPassword(passwordEncoder.encode(person.getPassword()));
             personRepository.save(person);
             UriComponents uriComponents =
                     b.path("/person/{id}").buildAndExpand(person.getId());
