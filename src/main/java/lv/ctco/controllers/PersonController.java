@@ -25,8 +25,8 @@ public class PersonController {
     @Autowired
     PersonRepository personRepository;
 
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @RequestMapping(path = "register/", method = RequestMethod.POST)
     public ResponseEntity<?> registerPerson(@RequestBody Person person, UriComponentsBuilder b) {
@@ -40,7 +40,7 @@ public class PersonController {
             UserRoles userRoles = new UserRoles();
             userRoles.setRole("USER");
             person.setUserRoles(Arrays.asList(userRoles));
-//           person.setPassword(passwordEncoder.encode(person.getPassword()));
+           person.setPassword(passwordEncoder.encode(person.getPassword()));
             personRepository.save(person);
             UriComponents uriComponents =
                     b.path("/person/{id}").buildAndExpand(person.getId());
