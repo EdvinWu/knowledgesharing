@@ -57,7 +57,6 @@ public class FeedbackControllerTest {
         Feedback feedback = new Feedback();
         feedback.setComment("Comment");
         feedback.setRating(10);
-        //session.addFeedback(feedback);
 
        Headers sessionHeader = given().
                contentType(JSON)
