@@ -1,6 +1,8 @@
 package lv.ctco.controllers;
 
 import lv.ctco.entities.KnowledgeSession;
+import lv.ctco.entities.Person;
+import lv.ctco.repository.PersonRepository;
 import lv.ctco.repository.SessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -21,6 +23,8 @@ public class SessionController {
 
     @Autowired
     SessionRepository sessionRepository;
+    @Autowired
+    PersonRepository personRepository;
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<?> getAllSessions() {
@@ -46,6 +50,24 @@ public class SessionController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @RequestMapping(path = "/{idUser}/{idSession}",method = RequestMethod.POST)
+    public ResponseEntity<?> addUserToSession(@PathVariable ("idUser") long idUser,
+                                              @PathVariable ("idSession") long idSession) {
+        if(!sessionRepository.exists(idSession)|| !personRepository.exists(idUser)) {
+            return new ResponseEntity<>("Session or user not found",HttpStatus.NOT_FOUND);
+        }
+
+        Person person = personRepository.findOne(idUser);
+        KnowledgeSession session = sessionRepository.findOne(idSession);
+        List<Person> personList = session.getUsers();
+        personList.add(person);
+        session.setUsers(personList);
+        sessionRepository.save(session);
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> addSession(@RequestBody KnowledgeSession session, UriComponentsBuilder b) {
