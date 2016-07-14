@@ -53,8 +53,9 @@ public class PersonController {
     }
 
     @RequestMapping(path = "adduser/", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
-    public ResponseEntity<?> userAdd(@RequestParam String username, String password) {
+    public ResponseEntity<?> userAdd(@RequestParam String username, String fullname, String password) {
         Person person = new Person();
+        person.setFullName(fullname);
         person.setUserName(username);
         person.setPassword(passwordEncoder.encode(password));
         UserRoles userRoles = new UserRoles();
