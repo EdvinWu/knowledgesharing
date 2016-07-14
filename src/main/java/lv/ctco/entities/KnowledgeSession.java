@@ -26,7 +26,7 @@ public class KnowledgeSession {
     private List<Tag> tags = new ArrayList<>();
     @OneToMany(mappedBy = "session",cascade = CascadeType.ALL)
     private List<Feedback> feedbacks = new ArrayList<>();
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "session_user",
             joinColumns = @JoinColumn(name = "session_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
