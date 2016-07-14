@@ -37,6 +37,16 @@ public class SessionController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @RequestMapping(path = TAG_PATH, method = RequestMethod.GET)
+    public ResponseEntity<?> getSessionByTag(@RequestParam String name) {
+        List<KnowledgeSession> sessions;
+        sessions = sessionRepository.findByTag(name);
+        if (sessions != null) {
+            return new ResponseEntity<>(sessions, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> addSession(@RequestBody KnowledgeSession session, UriComponentsBuilder b) {
         sessionRepository.save(session);
