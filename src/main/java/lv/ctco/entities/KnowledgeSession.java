@@ -24,7 +24,7 @@ public class KnowledgeSession {
     private LocalDateTime date;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Tag> tags = new ArrayList<>();
-    @OneToMany
+    @OneToMany(mappedBy = "session")
     private List<Feedback> feedbacks = new ArrayList<>();
     @ManyToMany
     @JoinTable(name = "session_user",

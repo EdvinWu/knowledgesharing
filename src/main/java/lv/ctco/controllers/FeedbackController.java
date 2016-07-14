@@ -2,8 +2,10 @@ package lv.ctco.controllers;
 
 import lv.ctco.entities.Feedback;
 import lv.ctco.entities.KnowledgeSession;
+import lv.ctco.entities.Person;
 import lv.ctco.enums.SessionStatus;
 import lv.ctco.repository.FeedbackRepository;
+import lv.ctco.repository.PersonRepository;
 import lv.ctco.repository.SessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -24,6 +26,8 @@ import static lv.ctco.Consts.SESSION_PATH;
 @RequestMapping(SESSION_PATH)
 public class FeedbackController {
 
+    @Autowired
+    PersonRepository personRepository;
     @Autowired
     FeedbackRepository feedbackRepository;
     @Autowired
@@ -50,35 +54,36 @@ public class FeedbackController {
     }
 
     @Transactional
-    @RequestMapping(path = "/{id}" + FEEDBACK_PATH, method = RequestMethod.POST)
-    public ResponseEntity<?> addFeedback(@PathVariable("id") long id,
+    @RequestMapping(path = "/{id}" + FEEDBACK_PATH + "/{personId}", method = RequestMethod.POST)
+    public ResponseEntity<?> addFeedback(@PathVariable("id") long id, @PathVariable("personId") long personId,
                                          @RequestBody Feedback feedback,
                                          UriComponentsBuilder b) {
-        if (sessionRepository.findOne(id)
-                .getUsers()
-                .stream()
-                .filter((p) -> p.getId() == feedback.getPersonID()).findFirst().get() != null) {
-            if (sessionRepository.exists(id)) {
-                KnowledgeSession session = sessionRepository.findOne(id);
-                if(session.getStatus() == SessionStatus.DONE) {
-                    session.addFeedback(feedback);
-                    feedbackRepository.save(feedback);
-                    sessionRepository.save(session);
-                    UriComponents uriComponents =
-                            b.path(SESSION_PATH + "/{id}" + FEEDBACK_PATH + "/" + feedback.getId()).buildAndExpand(session.getId());
-                    HttpHeaders responseHeaders = new HttpHeaders();
-                    responseHeaders.setLocation(uriComponents.toUri());
 
-                    return new ResponseEntity<>(HttpStatus.CREATED);
-                } else {
-                    return new ResponseEntity<>("You cant add feedback if session status isn't 'done'",HttpStatus.BAD_REQUEST);
-                }
-
-            }
-            return new ResponseEntity<>("No such session found",HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity<>("User doesn't belong to session",HttpStatus.NOT_FOUND);
+        if (!sessionRepository.exists(id) || !personRepository.exists(personId)) {
+            return new ResponseEntity<>("No such session or person found", HttpStatus.NOT_FOUND);
         }
+        KnowledgeSession session = sessionRepository.findOne(id);
+
+        if (session.getStatus() != SessionStatus.DONE) {
+            return new ResponseEntity<>("You cant add feedback if session status isn't 'done'", HttpStatus.BAD_REQUEST);
+        }
+
+        Person person = personRepository.findOne(personId);
+
+        if (sessionRepository.findPersonByFeedBack(session, person) == null) {
+            return new ResponseEntity<>("User doesn't belong to session", HttpStatus.NOT_FOUND);
+        }
+        feedback.setPerson(person);
+        feedback.setSession(session);
+        session.addFeedback(feedback);
+        feedbackRepository.save(feedback);
+        sessionRepository.save(session);
+        UriComponents uriComponents =
+                b.path(SESSION_PATH + "/{id}" + FEEDBACK_PATH + "/" + feedback.getId()).buildAndExpand(session.getId());
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.setLocation(uriComponents.toUri());
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Transactional
@@ -108,4 +113,6 @@ public class FeedbackController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+
 }

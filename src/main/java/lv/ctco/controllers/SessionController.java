@@ -69,6 +69,8 @@ public class SessionController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+
+
     @Transactional
     @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity<?> updateSessionByID(@PathVariable("id") long id,
