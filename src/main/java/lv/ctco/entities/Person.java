@@ -3,6 +3,9 @@ package lv.ctco.entities;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +18,7 @@ public class Person {
     private String fullName;
     @Column(name = "username")
     private String userName;
-    @Column(name = "pass", nullable = false)
+    @Column(name = "pass")
     private String password;
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
