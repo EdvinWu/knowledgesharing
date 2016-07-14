@@ -1,8 +1,10 @@
 package lv.ctco.controllers;
 
+import lv.ctco.entities.KnowledgeSession;
 import lv.ctco.entities.Person;
 import lv.ctco.entities.UserRoles;
 import lv.ctco.repository.PersonRepository;
+import lv.ctco.repository.SessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,11 +25,25 @@ public class PersonController {
 
     @Autowired
     PersonRepository personRepository;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    SessionRepository sessionRepository;
+
+    @Transactional
+    @RequestMapping(path = "person/{id}/attends/{id}", method = RequestMethod.POST)
+    public ResponseEntity<?> attendPersonToSession(@PathVariable("id") long id,
+                                                   @PathVariable("id") long sessionID){
+        Person person = personRepository.findOne(id);
+        List<KnowledgeSession> sessions = person.getAttended();
+        sessions.add(sessionRepository.findOne(sessionID));
+        person.setAttended(sessions);
+        personRepository.save(person);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 
 
+    @Transactional
     @RequestMapping(path = "register/", method = RequestMethod.POST)
     public ResponseEntity<?> registerPerson(@RequestBody Person person, UriComponentsBuilder b) {
         List<Person> persons = personRepository.findAll();
@@ -51,6 +67,7 @@ public class PersonController {
         }
     }
 
+    @Transactional
     @RequestMapping(path = "adduser/", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
     public ResponseEntity<?> userAdd(@RequestParam String username, String password) {
         Person person = new Person();
