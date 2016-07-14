@@ -13,6 +13,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 import static lv.ctco.Consts.*;
@@ -42,7 +43,7 @@ public class SessionController {
     }
 
     @RequestMapping(path = TAG_PATH, method = RequestMethod.GET)
-    public ResponseEntity<?> getSessionByTag(@RequestParam String name) {
+     public ResponseEntity<?> getSessionByTag(@RequestParam String name) {
         List<KnowledgeSession> sessions;
         sessions = sessionRepository.findByTag(name);
         if (sessions != null) {
@@ -66,6 +67,17 @@ public class SessionController {
         sessionRepository.save(session);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+
+    @RequestMapping(path = "/{id}/attends", method = RequestMethod.GET)
+    public ResponseEntity<?> getPersonsBySession(@PathVariable("id") long id) {
+        KnowledgeSession session = sessionRepository.findOne(id);
+        List<Person> persons = session.getUsers();
+        if (persons != null) {
+            return new ResponseEntity<>(persons, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 
