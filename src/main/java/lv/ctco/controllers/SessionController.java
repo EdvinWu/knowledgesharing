@@ -62,22 +62,6 @@ public class SessionController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @Transactional
-    @RequestMapping(path = "/{id}/attends", method = RequestMethod.POST)
-    public ResponseEntity<?> attendPersonToSession(@PathVariable("id") long id,
-                                                   @RequestBody Person person){
-        KnowledgeSession session = sessionRepository.findOne(id);
-        //if(session != null){
-            List<Person> persons = session.getUsers();
-            persons.add(person);
-            session.setUsers(persons);
-            sessionRepository.save(session);
-            return new ResponseEntity<>(HttpStatus.CREATED);
-           // }
-
-        //return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> addSession(@RequestBody KnowledgeSession session, UriComponentsBuilder b) {
         sessionRepository.save(session);
