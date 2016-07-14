@@ -17,7 +17,6 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
-import java.util.Optional;
 
 import static lv.ctco.Consts.FEEDBACK_PATH;
 import static lv.ctco.Consts.SESSION_PATH;

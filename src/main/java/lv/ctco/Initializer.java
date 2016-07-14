@@ -35,9 +35,11 @@ import java.util.UUID;
         public void onApplicationEvent(final ContextRefreshedEvent event) {
 
             Person person = new Person();
-            person.setFullName(UUID.randomUUID().toString());
+            //person.setFullName(UUID.randomUUID().toString());
+            person.setFullName("a");
             person.setPassword("0000");
-            person.setUserName(UUID.randomUUID().toString());
+            //person.setUserName(UUID.randomUUID().toString());
+            person.setUserName("a");
             personRepository.save(person);
 
             KnowledgeSession session = new KnowledgeSession();
@@ -45,7 +47,6 @@ import java.util.UUID;
             session.setTitle("Title");
             session.setDate(null);
             session.setVotes(5);
-            //session.setTags(tags);
             sessionRepository.save(session);
         }
     }
