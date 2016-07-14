@@ -28,6 +28,7 @@ public class PersonController {
     private PasswordEncoder passwordEncoder;
 
 
+    @Transactional
     @RequestMapping(path = "register/", method = RequestMethod.POST)
     public ResponseEntity<?> registerPerson(@RequestBody Person person, UriComponentsBuilder b) {
         List<Person> persons = personRepository.findAll();
