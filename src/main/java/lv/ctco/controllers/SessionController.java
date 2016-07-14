@@ -1,6 +1,8 @@
 package lv.ctco.controllers;
 
 import lv.ctco.entities.KnowledgeSession;
+import lv.ctco.entities.Person;
+import lv.ctco.repository.PersonRepository;
 import lv.ctco.repository.SessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -11,6 +13,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 import static lv.ctco.Consts.*;
@@ -21,6 +24,8 @@ public class SessionController {
 
     @Autowired
     SessionRepository sessionRepository;
+    @Autowired
+    PersonRepository personRepository;
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<?> getAllSessions() {
@@ -38,13 +43,39 @@ public class SessionController {
     }
 
     @RequestMapping(path = TAG_PATH, method = RequestMethod.GET)
-    public ResponseEntity<?> getSessionByTag(@RequestParam String name) {
+     public ResponseEntity<?> getSessionByTag(@RequestParam String name) {
         List<KnowledgeSession> sessions;
         sessions = sessionRepository.findByTag(name);
         if (sessions != null) {
             return new ResponseEntity<>(sessions, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @RequestMapping(path = "/{id}/attends", method = RequestMethod.GET)
+    public ResponseEntity<?> getPersonsBySession(@PathVariable("id") long id) {
+        KnowledgeSession session = sessionRepository.findOne(id);
+        List<Person> persons = session.getUsers();
+        if (persons != null) {
+            return new ResponseEntity<>(persons, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @Transactional
+    @RequestMapping(path = "/{id}/attends", method = RequestMethod.POST)
+    public ResponseEntity<?> attendPersonToSession(@PathVariable("id") long id,
+                                                   @RequestBody Person person){
+        KnowledgeSession session = sessionRepository.findOne(id);
+        //if(session != null){
+            List<Person> persons = session.getUsers();
+            persons.add(person);
+            session.setUsers(persons);
+            sessionRepository.save(session);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+           // }
+
+        //return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(method = RequestMethod.POST)
