@@ -73,10 +73,17 @@ public class FeedbackController {
     public ResponseEntity<?> deleteFeedback(@PathVariable("id") long id, @PathVariable("fId") long feedbackID) {
         if (sessionRepository.exists(id)) {
             KnowledgeSession session = sessionRepository.findOne(id);
-            if (feedbackRepository.exists(feedbackID)) {
-                feedbackRepository.delete(feedbackID);
-                sessionRepository.save(session);
-                return new ResponseEntity<>(HttpStatus.OK);
+            List<Feedback> feedbacks = session.getFeedbacks();
+            Optional<Feedback> feedback = feedbacks.stream()
+                    .filter(t -> t.getId() == id)
+                    .findAny();
+            if (feedback != null) {
+                if (session.removeFeedback(feedbackID)) {
+                    feedbackRepository.delete(feedbackID);
+                    sessionRepository.save(session);
+                    return new ResponseEntity<>(HttpStatus.OK);
+                }
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
