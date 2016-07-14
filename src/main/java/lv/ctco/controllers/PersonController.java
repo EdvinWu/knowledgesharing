@@ -30,17 +30,17 @@ public class PersonController {
     @Autowired
     SessionRepository sessionRepository;
 
-    @Transactional
-    @RequestMapping(path = "person/{id}/attends/{id}", method = RequestMethod.POST)
-    public ResponseEntity<?> attendPersonToSession(@PathVariable("id") long id,
-                                                   @PathVariable("id") long sessionID){
-        Person person = personRepository.findOne(id);
-        List<KnowledgeSession> sessions = person.getAttended();
-        sessions.add(sessionRepository.findOne(sessionID));
-        person.setAttended(sessions);
-        personRepository.save(person);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
+//    @Transactional
+//    @RequestMapping(path = "person/{id}/attends/{id}", method = RequestMethod.POST)
+//    public ResponseEntity<?> attendPersonToSession(@PathVariable("id") long id,
+//                                                   @PathVariable("id") long sessionID){
+//        Person person = personRepository.findOne(id);
+//        List<KnowledgeSession> sessions = person.getAttended();
+//        sessions.add(sessionRepository.findOne(sessionID));
+//        person.setAttended(sessions);
+//        personRepository.save(person);
+//        return new ResponseEntity<>(HttpStatus.CREATED);
+//    }
 
 
     @Transactional

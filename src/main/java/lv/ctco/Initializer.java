@@ -4,6 +4,7 @@ import lv.ctco.entities.KnowledgeSession;
 import lv.ctco.entities.Person;
 import lv.ctco.entities.Tag;
 import lv.ctco.entities.UserRoles;
+import lv.ctco.enums.SessionStatus;
 import lv.ctco.repository.FeedbackRepository;
 import lv.ctco.repository.PersonRepository;
 import lv.ctco.repository.SessionRepository;
@@ -35,10 +36,10 @@ import java.util.UUID;
         public void onApplicationEvent(final ContextRefreshedEvent event) {
 
             Person person = new Person();
-            //person.setFullName(UUID.randomUUID().toString());
+            person.setFullName(UUID.randomUUID().toString());
             person.setFullName("a");
             person.setPassword("0000");
-            //person.setUserName(UUID.randomUUID().toString());
+            person.setUserName(UUID.randomUUID().toString());
             person.setUserName("a");
             personRepository.save(person);
 
@@ -47,6 +48,10 @@ import java.util.UUID;
             session.setTitle("Title");
             session.setDate(null);
             session.setVotes(5);
+            session.setStatus(SessionStatus.DONE);
+            List<Person> personsList = session.getUsers();
+            personsList.add(person);
+            session.setUsers(personsList);
             sessionRepository.save(session);
         }
     }

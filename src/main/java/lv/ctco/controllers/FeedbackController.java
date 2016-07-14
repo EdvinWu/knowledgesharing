@@ -33,6 +33,11 @@ public class FeedbackController {
     @Autowired
     SessionRepository sessionRepository;
 
+    @RequestMapping(path=FEEDBACK_PATH,method = RequestMethod.GET)
+    public ResponseEntity<?> getFeedbacks() {
+        return new ResponseEntity<>(feedbackRepository.findAll(),HttpStatus.OK);
+    }
+
     @RequestMapping(path = "/{id}" + FEEDBACK_PATH + "/{fId}", method = RequestMethod.GET)
     public ResponseEntity<?> getSessionFeedback(@PathVariable("id") long id, @PathVariable("fId") long feedbackID) {
         if (sessionRepository.exists(id)) {

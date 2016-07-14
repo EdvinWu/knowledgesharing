@@ -17,8 +17,6 @@ public class Person {
     private String userName;
     @Column(name = "pass", nullable = false)
     private String password;
-    @ManyToMany(mappedBy = "users")
-    private List<KnowledgeSession> attended;
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
     private List<UserRoles> userRoles = new ArrayList<>();
@@ -66,13 +64,6 @@ public class Person {
         this.password = password;
     }
 
-    public List<KnowledgeSession> getAttended() {
-        return attended;
-    }
-
-    public void setAttended(List<KnowledgeSession> attended) {
-        this.attended = attended;
-    }
 
 
 }
