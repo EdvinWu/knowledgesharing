@@ -32,6 +32,17 @@ public class TagController {
         return new ResponseEntity<>(tagList, HttpStatus.OK);
     }
 
+    @RequestMapping(path = "/{id}" + TAG_PATH + "/{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> getTagsByID(@PathVariable("id") long id, @PathVariable("id") long tagID) {
+        if (sessionRepository.exists(id)) {
+            if (tagRepository.exists(tagID)) {
+                Tag tag = tagRepository.findOne(tagID);
+                return new ResponseEntity<>(tag, HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
     @Transactional
     @RequestMapping(path = "/{id}"+ TAG_PATH, method = RequestMethod.POST)
     public ResponseEntity<?> addTag(@PathVariable("id") long id,
@@ -63,6 +74,20 @@ public class TagController {
                 }
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @Transactional
+    @RequestMapping(path = "/{id}" + TAG_PATH + "/{tId}", method = RequestMethod.PUT)
+    public ResponseEntity<?> updateTag(@PathVariable("id") long id, @PathVariable("tId") long tagID,
+                                            @RequestBody Tag tag) {
+        tag.setId(tagID);
+        if (sessionRepository.exists(id)) {
+            KnowledgeSession session = sessionRepository.findOne(id);
+            tagRepository.save(tag);
+            sessionRepository.save(session);
+            return new ResponseEntity<>("text", HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
