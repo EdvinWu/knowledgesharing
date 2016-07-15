@@ -113,5 +113,24 @@ public class SessionController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @RequestMapping(path = "/{sessionId}/user/{person_id}", method = RequestMethod.POST)
+    public ResponseEntity<?> addPersonToSession(@PathVariable("person_id") long personId,
+                                                @PathVariable("sessionId") long sessionId){
+        if(personRepository.exists(personId) && sessionRepository.exists(sessionId)){
+            KnowledgeSession session = sessionRepository.findOne(sessionId);
+            Person inputPerson = personRepository.findOne(personId);
+            for(Person person : session.getPersons()){
+                if(person.getId() == inputPerson.getId()){
+                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                }
+            }
+            List<Person> sessionPersons = session.getPersons();
+            sessionPersons.add(inputPerson);
+            session.setPersons(sessionPersons);
+            sessionRepository.save(session);
+        }
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 }
 
