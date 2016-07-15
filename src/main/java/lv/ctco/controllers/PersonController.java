@@ -1,7 +1,7 @@
 package lv.ctco.controllers;
 
 import lv.ctco.entities.Person;
-import lv.ctco.entities.UserRoles;
+import lv.ctco.entities.UserRole;
 import lv.ctco.repository.PersonRepository;
 import lv.ctco.repository.SessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class PersonController {
     SessionRepository sessionRepository;
 
     @Transactional
-    @RequestMapping(path = "register/", method = RequestMethod.POST)
+    @RequestMapping(path = "register", method = RequestMethod.POST)
     public ResponseEntity<?> registerPerson(@RequestBody Person person, UriComponentsBuilder b) {
         List<Person> persons = personRepository.findAll();
         Optional<Person> ifExists = persons.stream()
@@ -38,9 +38,9 @@ public class PersonController {
         if (ifExists.isPresent()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else {
-            UserRoles userRoles = new UserRoles();
-            userRoles.setRole("USER");
-            person.setUserRoles(Arrays.asList(userRoles));
+            UserRole userRole = new UserRole();
+            userRole.setRole("USER");
+            person.setUserRoles(Arrays.asList(userRole));
             person.setPassword(passwordEncoder.encode(person.getPassword()));
             personRepository.save(person);
             UriComponents uriComponents =
@@ -59,9 +59,9 @@ public class PersonController {
         person.setFullName(fullname);
         person.setUserLogin(username);
         person.setPassword(passwordEncoder.encode(password));
-        UserRoles userRoles = new UserRoles();
-        userRoles.setRole("USER");
-        person.setUserRoles(Arrays.asList(userRoles));
+        UserRole userRole = new UserRole();
+        userRole.setRole("USER");
+        person.setUserRoles(Arrays.asList(userRole));
         personRepository.save(person);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -74,7 +74,6 @@ public class PersonController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
 
     @RequestMapping(path = "person", method = RequestMethod.GET)
     public ResponseEntity<?> getAllPersons() {
@@ -94,16 +93,13 @@ public class PersonController {
 
     @Transactional
     @RequestMapping(path = "/person/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<?> updateStudentByID(@PathVariable("id") long id,
-                                               @RequestBody Person person) {
+    public ResponseEntity<?> updatePersonByID(@PathVariable("id") long id,
+                                              @RequestBody Person person) {
         if (personRepository.exists(id)) {
             Person editedPerson = personRepository.findOne(id);
             editedPerson.setFullName(person.getFullName());
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
     }
-
-
 }

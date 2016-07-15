@@ -58,40 +58,6 @@ public class FeedbackController {
     }
 
     @Transactional
-    @RequestMapping(path = "/{id}" + FEEDBACK_PATH + "/{personId}", method = RequestMethod.POST)
-    public ResponseEntity<?> addFeedback(@PathVariable("id") long id, @PathVariable("personId") long personId,
-                                         @RequestBody Feedback feedback,
-                                         UriComponentsBuilder b) {
-
-        if (!sessionRepository.exists(id) || !personRepository.exists(personId)) {
-            return new ResponseEntity<>("No such session or person found", HttpStatus.NOT_FOUND);
-
-        }
-        KnowledgeSession session = sessionRepository.findOne(id);
-
-        if (session.getStatus() != SessionStatus.DONE) {
-            return new ResponseEntity<>("You cant add feedback if session status isn't 'done'", HttpStatus.BAD_REQUEST);
-        }
-
-        Person person = personRepository.findOne(personId);
-
-        if (sessionRepository.findPersonByFeedBack(session, person) == null) {
-            return new ResponseEntity<>("User doesn't belong to session", HttpStatus.NOT_FOUND);
-        }
-        feedback.setPerson(person);
-        feedback.setSession(session);
-        session.addFeedback(feedback);
-        feedbackRepository.save(feedback);
-        sessionRepository.save(session);
-        UriComponents uriComponents =
-                b.path(SESSION_PATH + "/{id}" + FEEDBACK_PATH + "/" + feedback.getId()).buildAndExpand(session.getId());
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.setLocation(uriComponents.toUri());
-
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-
-    @Transactional
     @RequestMapping(path = "/{id}" + FEEDBACK_PATH + "/{fId}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteFeedback(@PathVariable("id") long id, @PathVariable("fId") long feedbackID) {
         if (sessionRepository.exists(id)) {

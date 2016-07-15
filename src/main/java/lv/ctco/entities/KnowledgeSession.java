@@ -1,6 +1,5 @@
 package lv.ctco.entities;
 
-
 import lv.ctco.enums.SessionStatus;
 
 import javax.persistence.*;
@@ -9,31 +8,33 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
-@Entity(name = "Session")
-@Table(name = "Session")
+@Entity
+@Table(name = "session")
 public class KnowledgeSession {
-
     @Id
     @GeneratedValue
     private long id;
     private String title;
     private String author;
+    private String description;
     private int votes;
     private SessionStatus status;
     private LocalDateTime date;
-    private String description;
-    @OneToMany(cascade = CascadeType.ALL)
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "session_tag",
+            joinColumns = @JoinColumn(name = "session_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
     private List<Tag> tags = new ArrayList<>();
+
     @OneToMany(cascade = CascadeType.ALL)
     private List<Feedback> feedbacks = new ArrayList<>();
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "session_user",
             joinColumns = @JoinColumn(name = "session_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
-    private List<Person> users = new ArrayList<>();
-
-
+    private List<Person> persons = new ArrayList<>();
 
     public String getDescription() {
         return description;
@@ -41,10 +42,6 @@ public class KnowledgeSession {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public KnowledgeSession(){
-        setStatus(status.PENDING);
     }
 
     public SessionStatus getStatus() {
@@ -113,12 +110,12 @@ public class KnowledgeSession {
             this.feedbacks.addAll(feedbacks);
     }
 
-    public List<Person> getUsers() {
-        return users;
+    public List<Person> getPersons() {
+        return persons;
     }
 
-    public void setUsers(List<Person> users) {
-        this.users = users;
+    public void setPersons(List<Person> persons) {
+        this.persons = persons;
     }
 
 

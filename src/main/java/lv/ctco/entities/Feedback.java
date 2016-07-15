@@ -2,28 +2,15 @@ package lv.ctco.entities;
 
 import javax.persistence.*;
 
-
 @Entity
+@Table(name = "feedbacks")
 public class Feedback {
     @Id
     @GeneratedValue
     private long id;
     private int rating;
-    @ManyToOne
-    @JoinColumn(name = "person_id")
-    private Person person;
+    private String personName;
     private String comment;
-    @ManyToOne
-    @JoinColumn(name = "session_id")
-    private KnowledgeSession session;
-
-    public KnowledgeSession getSession() {
-        return session;
-    }
-
-    public void setSession(KnowledgeSession session) {
-        this.session = session;
-    }
 
     public long getId() {
         return id;
@@ -41,6 +28,14 @@ public class Feedback {
         this.rating = rating;
     }
 
+    public String getPersonName() {
+        return personName;
+    }
+
+    public void setPersonName(String name) {
+        this.personName = name;
+    }
+
     public String getComment() {
         return comment;
     }
@@ -48,13 +43,4 @@ public class Feedback {
     public void setComment(String comment) {
         this.comment = comment;
     }
-
-    public Person getPerson() {
-        return person;
-    }
-
-    public void setPerson(Person person) {
-        this.person = person;
-    }
-
 }

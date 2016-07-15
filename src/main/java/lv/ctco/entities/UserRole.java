@@ -1,20 +1,17 @@
 package lv.ctco.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Entity
-@Table(name = "tags")
-public class Tag {
+@Table(name = "user_roles")
+public class UserRole {
     @Id
     @GeneratedValue
     private long id;
-    private String name;
+    @Column(name = "user_role")
+    private String role;
 
     public long getId() {
         return id;
@@ -24,11 +21,11 @@ public class Tag {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getRole() {
+        return role;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRole(String role) {
+        this.role = role;
     }
 }
