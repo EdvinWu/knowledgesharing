@@ -38,7 +38,7 @@ function addSession(event){
         url: 'http://localhost:8080/sessions',
         data: JSON.stringify({
             title:document.session.title.value,
-            host:document.session.host.value,
+            author:document.session.host.value,
             description:document.session.description.value
         }),
         contentType: 'application/json',
