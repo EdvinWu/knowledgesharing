@@ -34,6 +34,8 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <script src="js/handlebars.js"></script>
+    <script src="js/sessions.js"></script>
 </head>
 
 <body>
@@ -62,7 +64,7 @@
     <div class="container">
         <h1>Hello, world!</h1>
         <p>Some greeting text.</p>
-        <button type="button" href="#" class="btn btn-lg btn-primary">View all sessions</button>
+        <button type="button" onclick="drawSessionList(event)" class="btn btn-lg btn-primary">View all sessions</button>
         <button type="button" href="#" class="btn btn-lg btn-primary">View pending sessions</button>
         <button type="button" href="#" class="btn btn-lg btn-primary">Propose session</button>
     </div>

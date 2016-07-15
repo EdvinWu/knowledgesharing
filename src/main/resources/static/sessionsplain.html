@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sessions</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script src="js/handlebars.js"></script>
+    <script src="js/sessions.js"></script>
+</head>
+<body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+</body>
+
+<script id="session-list" type="text/x-handlebars-template">
+    <div class="session-list">
+        <h1>Session list</h1>
+        <div>
+            {{{body}}}
+        </div>
+    </div>
+</script>
+
+<script id="session" type="text/x-handlebars-template">
+    <div class="session">
+        <table>
+            <tr>
+                <td> {{id}} </td>
+                <td>{{title}}</td>
+            </tr>
+
+        </table>
+
+    </div>
+</script>
+
+</html>
+
+<form name="session" onsubmit="addSession(event)">
+    Id: <input type="text" name="id">
+    Title: <input type="text" name="title">
+    <button type="submit">Add</button>
+
+</form>
+

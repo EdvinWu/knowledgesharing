@@ -22,6 +22,7 @@ public class KnowledgeSession {
     private int votes;
     private SessionStatus status;
     private LocalDateTime date;
+    private String description;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Tag> tags = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL)
@@ -31,6 +32,16 @@ public class KnowledgeSession {
             joinColumns = @JoinColumn(name = "session_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private List<Person> users = new ArrayList<>();
+
+
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public KnowledgeSession(){
         setStatus(status.PENDING);
