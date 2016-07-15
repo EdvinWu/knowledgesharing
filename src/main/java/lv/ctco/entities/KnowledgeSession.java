@@ -16,6 +16,7 @@ public class KnowledgeSession {
     private long id;
     private String title;
     private String author;
+    private String description;
     private int votes;
     private SessionStatus status;
     private LocalDateTime date;
@@ -34,6 +35,14 @@ public class KnowledgeSession {
             joinColumns = @JoinColumn(name = "session_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private List<Person> persons = new ArrayList<>();
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public SessionStatus getStatus() {
         return status;
