@@ -37,18 +37,17 @@ public class Initializer implements ApplicationListener<ContextRefreshedEvent> {
     @Transactional
     @Override
     public void onApplicationEvent(final ContextRefreshedEvent event) {
-
         Person person = new Person();
         //person.setFullName(UUID.randomUUID().toString());
-        person.setFullName("a");
+        person.setFullName("Kif Kroker");
         person.setPassword("0000");
         //person.setUserName(UUID.randomUUID().toString());
-        person.setUserName("a");
+        person.setUserLogin("a");
         personRepository.save(person);
 
         Person testPerson = new Person();
         person.setFullName("SnoopySnoop");
-        person.setUserName("SnoopDogg");
+        person.setUserLogin("SnoopDogg");
         person.setPassword(passwordEncoder.encode("123456789"));
         UserRoles userRoles = new UserRoles();
         userRoles.setRole("USER");

@@ -33,7 +33,7 @@ public class PersonController {
     public ResponseEntity<?> registerPerson(@RequestBody Person person, UriComponentsBuilder b) {
         List<Person> persons = personRepository.findAll();
         Optional<Person> ifExists = persons.stream()
-                .filter(p -> p.getUserName().equals(person.getUserName()))
+                .filter(p -> p.getUserLogin().equals(person.getUserLogin()))
                 .findFirst();
         if (ifExists.isPresent()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -57,7 +57,7 @@ public class PersonController {
     public ResponseEntity<?> userAdd(@RequestParam String username, String fullname, String password) {
         Person person = new Person();
         person.setFullName(fullname);
-        person.setUserName(username);
+        person.setUserLogin(username);
         person.setPassword(passwordEncoder.encode(password));
         UserRoles userRoles = new UserRoles();
         userRoles.setRole("USER");
