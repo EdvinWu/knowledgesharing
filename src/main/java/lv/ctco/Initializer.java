@@ -1,6 +1,9 @@
 package lv.ctco;
 
-import lv.ctco.entities.*;
+import lv.ctco.entities.KnowledgeSession;
+import lv.ctco.entities.Person;
+import lv.ctco.entities.Tag;
+import lv.ctco.entities.UserRoles;
 import lv.ctco.repository.FeedbackRepository;
 import lv.ctco.repository.PersonRepository;
 import lv.ctco.repository.SessionRepository;
@@ -10,8 +13,12 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 
 @Component
@@ -27,6 +34,7 @@ public class Initializer implements ApplicationListener<ContextRefreshedEvent> {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Transactional
     @Override
     public void onApplicationEvent(final ContextRefreshedEvent event) {
         UserRole userRole = new UserRole();
