@@ -34,6 +34,15 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <script type="text/javascript">
+        function RedirectAddSession() {
+            window.location="http://localhost:8080/addSession.html";
+        }
+
+//        function RedirectViewPendingSessions() {
+//            window.location="http://localhost:8080/addSession.html";
+//        }
+    </script>
 </head>
 
 <body>
@@ -49,8 +58,8 @@
             </button>
             <a class="navbar-brand" href="#">Project name</a>
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Sessions</a></li>
-                <li><a href="#about">Profile</a></li>
+                <li class="active"><a href="/index.html">Sessions</a></li>
+                <li><a href="/profile.html">Profile</a></li>
             </ul>
         </div>
     </div>
@@ -64,7 +73,7 @@
         <p>Some greeting text.</p>
         <button type="button" href="#" class="btn btn-lg btn-primary">View all sessions</button>
         <button type="button" href="#" class="btn btn-lg btn-primary">View pending sessions</button>
-        <button type="button" href="#" class="btn btn-lg btn-primary">Propose session</button>
+        <button type="button" onclick="RedirectAddSession();" class="btn btn-lg btn-primary">Propose session</button>
     </div>
 </div>
 
@@ -168,7 +177,7 @@
     <hr>
 
     <footer>
-        <p>&copy; 2015 Company, Inc.</p>
+        <p>&copy; 2016 JAVA School, Inc.</p>
     </footer>
 </div> <!-- /container -->
 
