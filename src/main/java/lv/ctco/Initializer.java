@@ -3,7 +3,7 @@ package lv.ctco;
 import lv.ctco.entities.KnowledgeSession;
 import lv.ctco.entities.Person;
 import lv.ctco.entities.Tag;
-import lv.ctco.entities.UserRoles;
+import lv.ctco.entities.UserRole;
 import lv.ctco.repository.FeedbackRepository;
 import lv.ctco.repository.PersonRepository;
 import lv.ctco.repository.SessionRepository;

@@ -59,9 +59,9 @@ public class SessionController {
 
         Person person = personRepository.findOne(idUser);
         KnowledgeSession session = sessionRepository.findOne(idSession);
-        List<Person> personList = session.getUsers();
+        List<Person> personList = session.getPersons();
         personList.add(person);
-        session.setUsers(personList);
+        session.setPersons(personList);
         sessionRepository.save(session);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -78,10 +78,6 @@ public class SessionController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 5cd428e1e6dcef8caa6c36f84bc8c70ebf0ae1c5
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> addSession(@RequestBody KnowledgeSession session, UriComponentsBuilder b) {
         sessionRepository.save(session);
@@ -92,9 +88,6 @@ public class SessionController {
         responseHeaders.setLocation(uriComponents.toUri());
         return new ResponseEntity<String>(responseHeaders, HttpStatus.CREATED);
     }
-
-
-
 
     @Transactional
     @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
