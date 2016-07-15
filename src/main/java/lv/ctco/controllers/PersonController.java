@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -66,13 +67,10 @@ public class PersonController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @RequestMapping(path = "person/{id}", method = RequestMethod.GET)
-    public ResponseEntity<?> getPerson(@PathVariable("id") long id) {
-        if (personRepository.exists(id)) {
-            Person person = personRepository.findOne(id);
-            return new ResponseEntity<>(person, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    @RequestMapping(path = "person", method = RequestMethod.GET)
+    public ResponseEntity<?> getPerson(Principal principal) {
+        Person currentPerson = personRepository.findUserByLogin(principal.getName());
+        return new ResponseEntity<>(currentPerson, HttpStatus.OK);
     }
 
     @RequestMapping(path = "person", method = RequestMethod.GET)
