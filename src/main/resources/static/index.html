@@ -29,7 +29,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Project name</a>
+            <a class="navbar-brand" href="#">KnowledgeSharing</a>
             <ul class="nav navbar-nav">
                 <li class="active"><a href="/index.html">Sessions</a></li>
                 <li><a href="/profile.html">Profile</a></li>
@@ -43,6 +43,26 @@
         <h2>Session List</h2>
     </div>
 </div>
+<form name="f" action="http://localhost:8080/sessions/tag" method="get"
+      enctype="application/x-www-form-urlencoded">
+    <div class="row">
+        <div class="col-xs-12 col-sm-4" style="margin-left: 370px;">
+            <div class="form-group">
+                <label> tag: </label>
+                <input type="text" name="tagname" id="tagname" class="form-control"
+                       placeholder="Enter your tag here" pattern=".{4,}"
+                       title="search by tag">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-4 col-md-4" style="margin-left: 510px;">
+            <div class="form-group">
+                <button type="submit" class="btn btn-success">search by tag</button>
+            </div>
+        </div>
+    </div>
+</form>
 
 
 <script id="session-list" type="text/x-handlebars-template">

@@ -15,10 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
 
 
 @Component
@@ -43,13 +40,13 @@ public class Initializer implements ApplicationListener<ContextRefreshedEvent> {
         Person person = new Person();
         person.setFullName("Kif Kroker");
         person.setPassword("0000");
-        person.setUserLogin("Kif");
+        person.setLogin("Kif");
         person.setUserRoles(Arrays.asList(userRole));
 //        personRepository.save(person);
 
         Person person2 = new Person();
         person2.setFullName("SnoopySnoop");
-        person2.setUserLogin("SnoopDogg");
+        person2.setLogin("SnoopDogg");
         person2.setPassword("1234");
         person2.setUserRoles(Arrays.asList(userRole));
         personRepository.save(Arrays.asList(person, person2));
@@ -60,15 +57,16 @@ public class Initializer implements ApplicationListener<ContextRefreshedEvent> {
         session.setDate(null);
         session.setVotes(5);
 
-//        Tag tag = new Tag();
-//        tag.setName("Captaining 101");
-//        session.setTags(Arrays.asList(tag));
-//
+        Tag tag = new Tag();
+        tag.setName("java");
+        session.setTags(Arrays.asList(tag));
+
+
 //        Feedback feedback = new Feedback();
 //        feedback.setComment("Disgusting");
 //        feedback.setPersonName("Leela");
 //        feedback.setRating(2);
-//
+
 //        session.setFeedbacks(Arrays.asList(feedback));
 //        session.setPersons(Arrays.asList(person));
 

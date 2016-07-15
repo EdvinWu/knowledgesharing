@@ -1,7 +1,5 @@
 package lv.ctco.entities;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +11,9 @@ public class Person {
     @GeneratedValue
     private long id;
     private String fullName;
-    private String userLogin;
+    @Column (name = "LOGIN", unique = true, nullable = false)
+    private String login;
+    @Column (name = "PASSWORD", nullable = false)
     private String password;
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -46,12 +46,12 @@ public class Person {
         this.fullName = fullName;
     }
 
-    public String getUserLogin() {
-        return userLogin;
+    public String getLogin() {
+        return login;
     }
 
-    public void setUserLogin(String userName) {
-        this.userLogin = userName;
+    public void setLogin(String userName) {
+        this.login = userName;
     }
 
     public String getPassword() {
@@ -61,5 +61,6 @@ public class Person {
     public void setPassword(String password) {
         this.password = password;
     }
+
 
 }

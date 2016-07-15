@@ -24,23 +24,23 @@ public class TagController {
     @Autowired
     SessionRepository sessionRepository;
 
-    @RequestMapping(path = "/{id}" + TAG_PATH, method = RequestMethod.GET)
-    public ResponseEntity<?> getAllSessionTags(@PathVariable("id") long id) {
-        KnowledgeSession session = sessionRepository.findOne(id);
-        List<Tag> tagList = session.getTags();
-        return new ResponseEntity<>(tagList, HttpStatus.OK);
-    }
+//    @RequestMapping(path = "/{id}" + TAG_PATH, method = RequestMethod.GET)
+//    public ResponseEntity<?> getAllSessionTags(@PathVariable("id") long id) {
+//        KnowledgeSession session = sessionRepository.findOne(id);
+//        List<Tag> tagList = session.getTags();
+//        return new ResponseEntity<>(tagList, HttpStatus.OK);
+//    }
 
-    @RequestMapping(path = "/{id}" + TAG_PATH + "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<?> getTagsByID(@PathVariable("id") long id, @PathVariable("id") long tagID) {
-        if (sessionRepository.exists(id)) {
-            if (tagRepository.exists(tagID)) {
-                Tag tag = tagRepository.findOne(tagID);
-                return new ResponseEntity<>(tag, HttpStatus.OK);
-            }
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+//    @RequestMapping(path = "/{id}" + TAG_PATH + "/{id}", method = RequestMethod.GET)
+//    public ResponseEntity<?> getTagsByID(@PathVariable("id") long id, @PathVariable("id") long tagID) {
+//        if (sessionRepository.exists(id)) {
+//            if (tagRepository.exists(tagID)) {
+//                Tag tag = tagRepository.findOne(tagID);
+//                return new ResponseEntity<>(tag, HttpStatus.OK);
+//            }
+//        }
+//        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//    }
 
     @Transactional
     @RequestMapping(path = "/{id}"+ TAG_PATH, method = RequestMethod.POST)

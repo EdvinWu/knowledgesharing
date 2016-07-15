@@ -13,6 +13,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.transaction.Transactional;
+import java.security.Principal;
 import java.util.List;
 
 import static lv.ctco.Consts.*;
@@ -40,15 +41,16 @@ public class SessionController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-//    @RequestMapping(path = TAG_PATH, method = RequestMethod.GET)
-//     public ResponseEntity<?> getSessionByTag(@RequestParam String name) {
-//        List<KnowledgeSession> sessions;
-//        sessions = sessionRepository.findByTag(name);
-//        if (sessions != null) {
-//            return new ResponseEntity<>(sessions, HttpStatus.OK);
-//        }
-//        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//    }
+    @RequestMapping(path = TAG_PATH, method = RequestMethod.GET, consumes = "application/x-www-form-urlencoded")
+     public ResponseEntity<?> getSessionByTag(@RequestParam String name) {
+        List<KnowledgeSession> sessions;
+        name = "java";
+        sessions = sessionRepository.findByTag(name);
+        if (sessions != null) {
+            return new ResponseEntity<>(sessions, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 
     @RequestMapping(path = "/{idUser}/{idSession}",method = RequestMethod.POST)
     public ResponseEntity<?> addUserToSession(@PathVariable ("idUser") long idUser,
@@ -112,6 +114,25 @@ public class SessionController {
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @RequestMapping(path = "/{sessionId}/user", method = RequestMethod.POST)
+    public ResponseEntity<?> addPersonToSession(@PathVariable("sessionId") long sessionId,
+                                                Principal principal){
+        if(sessionRepository.exists(sessionId)){
+            KnowledgeSession session = sessionRepository.findOne(sessionId);
+            Person inputPerson = personRepository.findUserByLogin(principal.getName());
+            for(Person person : session.getPersons()){
+                if(person.getId() == inputPerson.getId()){
+                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                }
+            }
+            List<Person> sessionPersons = session.getPersons();
+            sessionPersons.add(inputPerson);
+            session.setPersons(sessionPersons);
+            sessionRepository.save(session);
+        }
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }
 
