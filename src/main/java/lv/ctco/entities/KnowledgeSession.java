@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Entity
+@Entity(name = "Session")
 @Table(name = "session")
 public class KnowledgeSession {
     @Id
