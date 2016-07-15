@@ -13,6 +13,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.transaction.Transactional;
+import java.security.Principal;
 import java.util.List;
 
 import static lv.ctco.Consts.*;
@@ -114,12 +115,12 @@ public class SessionController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @RequestMapping(path = "/{sessionId}/user/{person_id}", method = RequestMethod.POST)
-    public ResponseEntity<?> addPersonToSession(@PathVariable("person_id") long personId,
-                                                @PathVariable("sessionId") long sessionId){
-        if(personRepository.exists(personId) && sessionRepository.exists(sessionId)){
+    @RequestMapping(path = "/{sessionId}/user", method = RequestMethod.POST)
+    public ResponseEntity<?> addPersonToSession(@PathVariable("sessionId") long sessionId,
+                                                Principal principal){
+        if(sessionRepository.exists(sessionId)){
             KnowledgeSession session = sessionRepository.findOne(sessionId);
-            Person inputPerson = personRepository.findOne(personId);
+            Person inputPerson = personRepository.findUserByLogin(principal.getName());
             for(Person person : session.getPersons()){
                 if(person.getId() == inputPerson.getId()){
                     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

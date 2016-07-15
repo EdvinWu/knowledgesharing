@@ -2,7 +2,6 @@ package lv.ctco;
 
 import lv.ctco.entities.KnowledgeSession;
 import lv.ctco.entities.Person;
-import lv.ctco.entities.Tag;
 import lv.ctco.entities.UserRole;
 import lv.ctco.repository.FeedbackRepository;
 import lv.ctco.repository.PersonRepository;
@@ -15,10 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
 
 
 @Component
@@ -43,13 +39,13 @@ public class Initializer implements ApplicationListener<ContextRefreshedEvent> {
         Person person = new Person();
         person.setFullName("Kif Kroker");
         person.setPassword("0000");
-        person.setUserLogin("Kif");
+        person.setLogin("Kif");
         person.setUserRoles(Arrays.asList(userRole));
 //        personRepository.save(person);
 
         Person person2 = new Person();
         person2.setFullName("SnoopySnoop");
-        person2.setUserLogin("SnoopDogg");
+        person2.setLogin("SnoopDogg");
         person2.setPassword("1234");
         person2.setUserRoles(Arrays.asList(userRole));
         personRepository.save(Arrays.asList(person, person2));
