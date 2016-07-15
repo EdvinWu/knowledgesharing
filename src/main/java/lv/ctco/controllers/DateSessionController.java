@@ -15,7 +15,6 @@ import static lv.ctco.Consts.SESSION_PATH;
 @RestController
 @RequestMapping(SESSION_PATH)
 public class DateSessionController {
-
     @Autowired
     SessionRepository sessionRepository;
 
@@ -59,5 +58,4 @@ public class DateSessionController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
 }

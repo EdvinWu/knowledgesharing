@@ -12,6 +12,17 @@ public class Feedback {
     private long personID;
     private String comment;
 
+    @ManyToOne
+    private KnowledgeSession session;
+
+    public KnowledgeSession getSession() {
+        return session;
+    }
+
+    public void setSession(KnowledgeSession session) {
+        this.session = session;
+    }
+
     public long getId() {
         return id;
     }

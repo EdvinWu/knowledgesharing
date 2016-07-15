@@ -1,6 +1,5 @@
 package lv.ctco.controllers;
 
-import lv.ctco.entities.KnowledgeSession;
 import lv.ctco.entities.Person;
 import lv.ctco.entities.UserRoles;
 import lv.ctco.repository.PersonRepository;
@@ -22,7 +21,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/")
 public class PersonController {
-
     @Autowired
     PersonRepository personRepository;
     @Autowired
@@ -98,7 +96,6 @@ public class PersonController {
     @RequestMapping(path = "/person/{id}", method = RequestMethod.PUT)
     public ResponseEntity<?> updateStudentByID(@PathVariable("id") long id,
                                                @RequestBody Person person) {
-
         if (personRepository.exists(id)) {
             Person editedPerson = personRepository.findOne(id);
             editedPerson.setFullName(person.getFullName());

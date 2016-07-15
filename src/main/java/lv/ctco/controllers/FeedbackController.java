@@ -22,7 +22,6 @@ import static lv.ctco.Consts.SESSION_PATH;
 @RestController
 @RequestMapping(SESSION_PATH)
 public class FeedbackController {
-
     @Autowired
     FeedbackRepository feedbackRepository;
     @Autowired
@@ -62,7 +61,6 @@ public class FeedbackController {
                     b.path(SESSION_PATH + "/{id}" + FEEDBACK_PATH + "/" + feedback.getId()).buildAndExpand(session.getId());
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.setLocation(uriComponents.toUri());
-
             return new ResponseEntity<>(HttpStatus.CREATED);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);

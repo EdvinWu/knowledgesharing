@@ -20,19 +20,31 @@ public class Person {
     private String userName;
     @Column(name = "pass")
     private String password;
+
     @JsonManagedReference
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "person_roles",
+            joinColumns = @JoinColumn(name = "person_id"),
+            inverseJoinColumns = @JoinColumn(name = "usre_role_id"))
     private List<UserRoles> userRoles = new ArrayList<>();
+
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy="users")
+    private List<KnowledgeSession> sessions = new ArrayList<>();
+
+    public List<KnowledgeSession> getSessions() {
+        return sessions;
+    }
+
+    public void setSessions(List<KnowledgeSession> sessions) {
+        this.sessions = sessions;
+    }
 
     public List<UserRoles> getUserRoles() {
         return userRoles;
     }
 
     public void setUserRoles(List<UserRoles> userRoles) {
-        if (userRoles == null) return;
-        this.userRoles.clear();
-        this.userRoles.addAll(userRoles);
-        userRoles.forEach(u -> u.setPerson(this));
+        this.userRoles = userRoles;
     }
 
     public long getId() {

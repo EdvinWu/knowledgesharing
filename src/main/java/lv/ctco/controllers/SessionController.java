@@ -21,7 +21,6 @@ import static lv.ctco.Consts.*;
 @RestController
 @RequestMapping(SESSION_PATH)
 public class SessionController {
-
     @Autowired
     SessionRepository sessionRepository;
     @Autowired
