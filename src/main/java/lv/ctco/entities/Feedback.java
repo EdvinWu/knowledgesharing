@@ -9,8 +9,21 @@ public class Feedback {
     @GeneratedValue
     private long id;
     private int rating;
-    private long personID;
+    @ManyToOne
+    @JoinColumn(name = "person_id")
+    private Person person;
     private String comment;
+    @ManyToOne
+    @JoinColumn(name = "session_id")
+    private KnowledgeSession session;
+
+    public KnowledgeSession getSession() {
+        return session;
+    }
+
+    public void setSession(KnowledgeSession session) {
+        this.session = session;
+    }
 
     public long getId() {
         return id;
@@ -28,14 +41,6 @@ public class Feedback {
         this.rating = rating;
     }
 
-    public long getPersonID() {
-        return personID;
-    }
-
-    public void setPersonID(long personID) {
-        this.personID = personID;
-    }
-
     public String getComment() {
         return comment;
     }
@@ -43,4 +48,13 @@ public class Feedback {
     public void setComment(String comment) {
         this.comment = comment;
     }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+
 }

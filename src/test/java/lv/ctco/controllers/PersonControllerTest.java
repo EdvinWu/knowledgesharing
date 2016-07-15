@@ -33,7 +33,7 @@ public class PersonControllerTest {
     @Test
     public void testGetByIDOK() {
         Person person = new Person();
-        person.setUserName("notAName");
+        person.setUserLogin("notAName");
         person.setPassword("1234DDD");
         person.setFullName("John Snow");
 
@@ -45,7 +45,7 @@ public class PersonControllerTest {
     @Test
     public void testPostOK() {
         Person person = new Person();
-        person.setUserName("Sherlock");
+        person.setUserLogin("Sherlock");
         person.setPassword("PW");
         person.setFullName("John Snow");
 
@@ -62,7 +62,7 @@ public class PersonControllerTest {
     @Test
     public void testPostFailed() {
         Person person = new Person();
-        person.setUserName("Watson");
+        person.setUserLogin("Watson");
         person.setPassword("PW");
         person.setFullName("John Snow");
         given().contentType(JSON).body(person).when().post(REGISTER_PATH).then().statusCode(CREATED);
@@ -72,7 +72,7 @@ public class PersonControllerTest {
     @Test
     public void testDeleteOK() {
         Person person = new Person();
-        person.setUserName("cannonboy");
+        person.setUserLogin("cannonboy");
         person.setPassword("PW");
 
         Headers header = given().contentType(JSON).body(person).when().post(REGISTER_PATH).getHeaders();
@@ -90,7 +90,7 @@ public class PersonControllerTest {
     @Test
     public void testPutOK() {
         Person person = new Person();
-        person.setUserName("CREEPY");
+        person.setUserLogin("CREEPY");
         person.setPassword("PW");
         person.setFullName("John Snow");
 

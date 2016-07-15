@@ -21,7 +21,6 @@ import static lv.ctco.Consts.*;
 @RestController
 @RequestMapping(SESSION_PATH)
 public class SessionController {
-
     @Autowired
     SessionRepository sessionRepository;
     @Autowired
@@ -51,6 +50,24 @@ public class SessionController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @RequestMapping(path = "/{idUser}/{idSession}",method = RequestMethod.POST)
+    public ResponseEntity<?> addUserToSession(@PathVariable ("idUser") long idUser,
+                                              @PathVariable ("idSession") long idSession) {
+        if(!sessionRepository.exists(idSession)|| !personRepository.exists(idUser)) {
+            return new ResponseEntity<>("Session or user not found",HttpStatus.NOT_FOUND);
+        }
+
+        Person person = personRepository.findOne(idUser);
+        KnowledgeSession session = sessionRepository.findOne(idSession);
+        List<Person> personList = session.getUsers();
+        personList.add(person);
+        session.setUsers(personList);
+        sessionRepository.save(session);
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
 
     @RequestMapping(path = "/{id}/attends", method = RequestMethod.GET)
     public ResponseEntity<?> getPersonsBySession(@PathVariable("id") long id) {
@@ -83,6 +100,8 @@ public class SessionController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+
 
     @Transactional
     @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
