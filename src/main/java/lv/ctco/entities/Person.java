@@ -3,9 +3,6 @@ package lv.ctco.entities;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,34 +13,20 @@ public class Person {
     @GeneratedValue
     private long id;
     private String fullName;
-    @Column(name = "username")
     private String userLogin;
-    @Column(name = "pass")
     private String password;
 
-    @JsonManagedReference
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "person_roles",
             joinColumns = @JoinColumn(name = "person_id"),
-            inverseJoinColumns = @JoinColumn(name = "usre_role_id"))
-    private List<UserRoles> userRoles = new ArrayList<>();
+            inverseJoinColumns = @JoinColumn(name = "user_role_id"))
+    private List<UserRole> userRoles = new ArrayList<>();
 
-    @ManyToMany(cascade = CascadeType.ALL, mappedBy="users")
-    private List<KnowledgeSession> sessions = new ArrayList<>();
-
-    public List<KnowledgeSession> getSessions() {
-        return sessions;
-    }
-
-    public void setSessions(List<KnowledgeSession> sessions) {
-        this.sessions = sessions;
-    }
-
-    public List<UserRoles> getUserRoles() {
+    public List<UserRole> getUserRoles() {
         return userRoles;
     }
 
-    public void setUserRoles(List<UserRoles> userRoles) {
+    public void setUserRoles(List<UserRole> userRoles) {
         this.userRoles = userRoles;
     }
 

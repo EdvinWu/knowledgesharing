@@ -23,11 +23,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests()
-                .antMatchers("/person/**").authenticated().and().formLogin()
+                .antMatchers("/google/google/**").authenticated().and().formLogin()
                 .loginPage("/login.html")
                 .permitAll().and()
                 .httpBasic().and()
-                .logout().logoutSuccessUrl("/login?logout").and()
+                .logout().logoutSuccessUrl("/login?logut").and()
                 .csrf().disable().logout().permitAll();
         httpSecurity.headers().frameOptions().disable();
     }

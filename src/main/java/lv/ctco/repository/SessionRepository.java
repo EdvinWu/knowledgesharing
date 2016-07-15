@@ -8,6 +8,6 @@ import java.util.List;
 
 
 public interface SessionRepository extends JpaRepository<KnowledgeSession,Long> {
-    @Query("select s from Session s join s.tags t where UPPER(t.name) LIKE CONCAT('%', CONCAT(UPPER(?1), '%'))")
-    List<KnowledgeSession> findByTag(String tag);
+//    @Query("select s from Session s join s.tags t where UPPER(t.name) LIKE CONCAT('%', CONCAT(UPPER(?1), '%'))")
+//    List<KnowledgeSession> findByTag(String tag);
 }

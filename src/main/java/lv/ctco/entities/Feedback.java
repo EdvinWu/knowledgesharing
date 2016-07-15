@@ -2,26 +2,15 @@ package lv.ctco.entities;
 
 import javax.persistence.*;
 
-
 @Entity
+@Table(name = "feedbacks")
 public class Feedback {
     @Id
     @GeneratedValue
     private long id;
     private int rating;
-    private long personID;
+    private String personName;
     private String comment;
-
-    @ManyToOne
-    private KnowledgeSession session;
-
-    public KnowledgeSession getSession() {
-        return session;
-    }
-
-    public void setSession(KnowledgeSession session) {
-        this.session = session;
-    }
 
     public long getId() {
         return id;
@@ -39,12 +28,12 @@ public class Feedback {
         this.rating = rating;
     }
 
-    public long getPersonID() {
-        return personID;
+    public String getPersonName() {
+        return personName;
     }
 
-    public void setPersonID(long personID) {
-        this.personID = personID;
+    public void setPersonName(String name) {
+        this.personName = name;
     }
 
     public String getComment() {

@@ -1,6 +1,5 @@
 package lv.ctco.entities;
 
-
 import lv.ctco.enums.SessionStatus;
 
 import javax.persistence.*;
@@ -9,9 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
 @Entity
-@Table(name = "Session")
+@Table(name = "session")
 public class KnowledgeSession {
     @Id
     @GeneratedValue
@@ -28,14 +26,14 @@ public class KnowledgeSession {
             inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
     private List<Tag> tags = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "session")
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Feedback> feedbacks = new ArrayList<>();
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "session_user",
             joinColumns = @JoinColumn(name = "session_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
-    private List<Person> users = new ArrayList<>();
+    private List<Person> persons = new ArrayList<>();
 
     public SessionStatus getStatus() {
         return status;
@@ -103,12 +101,12 @@ public class KnowledgeSession {
             this.feedbacks.addAll(feedbacks);
     }
 
-    public List<Person> getUsers() {
-        return users;
+    public List<Person> getPersons() {
+        return persons;
     }
 
-    public void setUsers(List<Person> users) {
-        this.users = users;
+    public void setPersons(List<Person> persons) {
+        this.persons = persons;
     }
 
 
