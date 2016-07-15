@@ -79,6 +79,26 @@
         <button type="button" onclick="RedirectAddSession();" class="btn btn-lg btn-primary">Propose session</button>
     </div>
 </div>
+<form name="f" action="http://localhost:8080/sessions/tag" method="get"
+      enctype="application/x-www-form-urlencoded">
+    <div class="row">
+        <div class="col-xs-12 col-sm-4" style="margin-left: 370px;">
+            <div class="form-group">
+                <label> tag: </label>
+                <input type="text" name="tagname" id="tagname" class="form-control"
+                       placeholder="Enter your tag here" pattern=".{4,}"
+                       title="search by tag">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-4 col-md-4" style="margin-left: 510px;">
+            <div class="form-group">
+                <button type="submit" class="btn btn-success">search by tag</button>
+            </div>
+        </div>
+    </div>
+</form>
 
 <div class="container">
     <div class="row">
