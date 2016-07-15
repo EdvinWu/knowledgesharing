@@ -23,7 +23,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests()
-                .antMatchers("/google/google/**").authenticated().and().formLogin()
+                .antMatchers("/sessions/**").authenticated().and().formLogin()
                 .loginPage("/login.html")
                 .permitAll().and()
                 .httpBasic().and()
@@ -39,14 +39,26 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+
         auth.jdbcAuthentication().dataSource(dataSource)
-                .passwordEncoder(passwordEncoder())
+//                .passwordEncoder(passwordEncoder())
                 .usersByUsernameQuery(
-                        "SELECT username, pass, 1 FROM persons WHERE username=?")
+                        "select LOGIN, PASSWORD, 1 from persons where LOGIN=?")
                 .authoritiesByUsernameQuery(
-                        "SELECT username,user_role " +
-                                "FROM persons p " +
-                                "INNER JOIN user_roles ur ON ur.personfk = p.id " +
-                                "WHERE p.username=?");
+                        "select LOGIN, user_role " +
+                                "from persons p " +
+                                "INNER JOIN user_roles ur ON ur.id = p.id " +
+                                "where p.LOGIN=?");
     }
+
+//        auth.jdbcAuthentication().dataSource(dataSource)
+//                .passwordEncoder(passwordEncoder())
+//                .usersByUsernameQuery(
+//                        "SELECT userLogin, password, 1 FROM persons WHERE userLogin=?")
+//                .authoritiesByUsernameQuery(
+//                        "SELECT userLogin,user_role " +
+//                                "FROM persons p " +
+//                                "INNER JOIN user_roles ur ON ur.personfk = p.id " +
+//                                "WHERE p.userLogin=?");
+//    }
 }
