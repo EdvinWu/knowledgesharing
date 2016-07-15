@@ -21,7 +21,6 @@ import static lv.ctco.Consts.*;
 @RestController
 @RequestMapping(SESSION_PATH)
 public class SessionController {
-
     @Autowired
     SessionRepository sessionRepository;
     @Autowired
@@ -80,7 +79,10 @@ public class SessionController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5cd428e1e6dcef8caa6c36f84bc8c70ebf0ae1c5
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> addSession(@RequestBody KnowledgeSession session, UriComponentsBuilder b) {
         sessionRepository.save(session);

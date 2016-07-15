@@ -17,13 +17,11 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-
     @Autowired
     DataSource dataSource;
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-
         httpSecurity.authorizeRequests()
                 .antMatchers("/person/**").authenticated().and().formLogin()
                 .loginPage("/login.html")
@@ -39,10 +37,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-
     @Autowired
     public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-
         auth.jdbcAuthentication().dataSource(dataSource)
                 .passwordEncoder(passwordEncoder())
                 .usersByUsernameQuery(

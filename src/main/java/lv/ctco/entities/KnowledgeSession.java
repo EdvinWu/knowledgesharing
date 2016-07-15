@@ -10,10 +10,9 @@ import java.util.List;
 import java.util.Optional;
 
 
-@Entity(name = "Session")
+@Entity
 @Table(name = "Session")
 public class KnowledgeSession {
-
     @Id
     @GeneratedValue
     private long id;
@@ -22,19 +21,20 @@ public class KnowledgeSession {
     private int votes;
     private SessionStatus status;
     private LocalDateTime date;
-    @OneToMany(cascade = CascadeType.ALL)
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "session_tag",
+            joinColumns = @JoinColumn(name = "session_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
     private List<Tag> tags = new ArrayList<>();
-    @OneToMany(mappedBy = "session",cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "session")
     private List<Feedback> feedbacks = new ArrayList<>();
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "session_user",
             joinColumns = @JoinColumn(name = "session_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private List<Person> users = new ArrayList<>();
-
-    public KnowledgeSession(){
-        setStatus(status.PENDING);
-    }
 
     public SessionStatus getStatus() {
         return status;

@@ -1,8 +1,8 @@
 package lv.ctco.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "user_roles")
@@ -12,17 +12,16 @@ public class UserRoles {
     private long id;
     @Column(name = "user_role")
     private String role;
-    @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "personfk", referencedColumnName = "id")
-    private Person person;
 
-    public Person getPerson() {
-        return person;
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "userRoles")
+    private List<Person> persons = new ArrayList<>();
+
+    public List<Person> getPersons() {
+        return persons;
     }
 
-    public void setPerson(Person person) {
-        this.person = person;
+    public void setPersons(List<Person> persons) {
+        this.persons = persons;
     }
 
     public long getId() {

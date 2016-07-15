@@ -17,22 +17,34 @@ public class Person {
     private long id;
     private String fullName;
     @Column(name = "username")
-    private String userName;
+    private String userLogin;
     @Column(name = "pass")
     private String password;
+
     @JsonManagedReference
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "person_roles",
+            joinColumns = @JoinColumn(name = "person_id"),
+            inverseJoinColumns = @JoinColumn(name = "usre_role_id"))
     private List<UserRoles> userRoles = new ArrayList<>();
+
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy="users")
+    private List<KnowledgeSession> sessions = new ArrayList<>();
+
+    public List<KnowledgeSession> getSessions() {
+        return sessions;
+    }
+
+    public void setSessions(List<KnowledgeSession> sessions) {
+        this.sessions = sessions;
+    }
 
     public List<UserRoles> getUserRoles() {
         return userRoles;
     }
 
     public void setUserRoles(List<UserRoles> userRoles) {
-        if (userRoles == null) return;
-        this.userRoles.clear();
-        this.userRoles.addAll(userRoles);
-        userRoles.forEach(u -> u.setPerson(this));
+        this.userRoles = userRoles;
     }
 
     public long getId() {
@@ -51,12 +63,12 @@ public class Person {
         this.fullName = fullName;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUserLogin() {
+        return userLogin;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserLogin(String userName) {
+        this.userLogin = userName;
     }
 
     public String getPassword() {

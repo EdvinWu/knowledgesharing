@@ -1,6 +1,5 @@
 package lv.ctco.controllers;
 
-import lv.ctco.entities.KnowledgeSession;
 import lv.ctco.entities.Person;
 import lv.ctco.entities.UserRoles;
 import lv.ctco.repository.PersonRepository;
@@ -22,7 +21,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/")
 public class PersonController {
-
     @Autowired
     PersonRepository personRepository;
     @Autowired
@@ -35,7 +33,7 @@ public class PersonController {
     public ResponseEntity<?> registerPerson(@RequestBody Person person, UriComponentsBuilder b) {
         List<Person> persons = personRepository.findAll();
         Optional<Person> ifExists = persons.stream()
-                .filter(p -> p.getUserName().equals(person.getUserName()))
+                .filter(p -> p.getUserLogin().equals(person.getUserLogin()))
                 .findFirst();
         if (ifExists.isPresent()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -59,7 +57,7 @@ public class PersonController {
     public ResponseEntity<?> userAdd(@RequestParam String username, String fullname, String password) {
         Person person = new Person();
         person.setFullName(fullname);
-        person.setUserName(username);
+        person.setUserLogin(username);
         person.setPassword(passwordEncoder.encode(password));
         UserRoles userRoles = new UserRoles();
         userRoles.setRole("USER");
@@ -98,7 +96,6 @@ public class PersonController {
     @RequestMapping(path = "/person/{id}", method = RequestMethod.PUT)
     public ResponseEntity<?> updateStudentByID(@PathVariable("id") long id,
                                                @RequestBody Person person) {
-
         if (personRepository.exists(id)) {
             Person editedPerson = personRepository.findOne(id);
             editedPerson.setFullName(person.getFullName());

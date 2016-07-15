@@ -17,6 +17,17 @@ public class Feedback {
     @JoinColumn(name = "session_id")
     private KnowledgeSession session;
 
+    @ManyToOne
+    private KnowledgeSession session;
+
+    public KnowledgeSession getSession() {
+        return session;
+    }
+
+    public void setSession(KnowledgeSession session) {
+        this.session = session;
+    }
+
     public long getId() {
         return id;
     }

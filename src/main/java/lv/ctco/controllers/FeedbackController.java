@@ -25,7 +25,6 @@ import static lv.ctco.Consts.SESSION_PATH;
 @RestController
 @RequestMapping(SESSION_PATH)
 public class FeedbackController {
-
     @Autowired
     PersonRepository personRepository;
     @Autowired
@@ -66,6 +65,7 @@ public class FeedbackController {
 
         if (!sessionRepository.exists(id) || !personRepository.exists(personId)) {
             return new ResponseEntity<>("No such session or person found", HttpStatus.NOT_FOUND);
+
         }
         KnowledgeSession session = sessionRepository.findOne(id);
 

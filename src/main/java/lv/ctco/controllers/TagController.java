@@ -19,7 +19,6 @@ import static lv.ctco.Consts.SESSION_PATH;
 @RestController
 @RequestMapping(SESSION_PATH)
 public class TagController {
-
     @Autowired
     TagRepository tagRepository;
     @Autowired
@@ -53,7 +52,6 @@ public class TagController {
             tags.add(tag);
             session.setTags(tags);
             sessionRepository.save(session);
-
             return new ResponseEntity<>(HttpStatus.CREATED);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
