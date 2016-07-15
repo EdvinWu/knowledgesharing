@@ -2,6 +2,7 @@ package lv.ctco;
 
 import lv.ctco.entities.KnowledgeSession;
 import lv.ctco.entities.Person;
+import lv.ctco.entities.Tag;
 import lv.ctco.entities.UserRole;
 import lv.ctco.repository.FeedbackRepository;
 import lv.ctco.repository.PersonRepository;
@@ -56,15 +57,16 @@ public class Initializer implements ApplicationListener<ContextRefreshedEvent> {
         session.setDate(null);
         session.setVotes(5);
 
-//        Tag tag = new Tag();
-//        tag.setName("Captaining 101");
-//        session.setTags(Arrays.asList(tag));
-//
+        Tag tag = new Tag();
+        tag.setName("java");
+        session.setTags(Arrays.asList(tag));
+
+
 //        Feedback feedback = new Feedback();
 //        feedback.setComment("Disgusting");
 //        feedback.setPersonName("Leela");
 //        feedback.setRating(2);
-//
+
 //        session.setFeedbacks(Arrays.asList(feedback));
 //        session.setPersons(Arrays.asList(person));
 
