@@ -4,6 +4,7 @@ import lv.ctco.entities.KnowledgeSession;
 import lv.ctco.entities.Person;
 import lv.ctco.entities.Tag;
 import lv.ctco.entities.UserRole;
+import lv.ctco.enums.SessionStatus;
 import lv.ctco.repository.FeedbackRepository;
 import lv.ctco.repository.PersonRepository;
 import lv.ctco.repository.SessionRepository;
@@ -36,6 +37,8 @@ public class Initializer implements ApplicationListener<ContextRefreshedEvent> {
     public void onApplicationEvent(final ContextRefreshedEvent event) {
         UserRole userRole = new UserRole();
         userRole.setRole("USER");
+        UserRole adminRole = new UserRole();
+        adminRole.setRole("ADMIN");
 
         Person person = new Person();
         person.setFullName("Kif Kroker");
@@ -45,15 +48,16 @@ public class Initializer implements ApplicationListener<ContextRefreshedEvent> {
 //        personRepository.save(person);
 
         Person person2 = new Person();
-        person2.setFullName("SnoopySnoop");
-        person2.setLogin("SnoopDogg");
+        person2.setFullName("Zapp Brannigan");
+        person2.setLogin("Zapp");
         person2.setPassword("1234");
-        person2.setUserRoles(Arrays.asList(userRole));
+        person2.setUserRoles(Arrays.asList(adminRole));
         personRepository.save(Arrays.asList(person, person2));
 
         KnowledgeSession session = new KnowledgeSession();
         session.setAuthor("Zapp Brannigan");
         session.setTitle("Learning");
+        session.setStatus(SessionStatus.PENDING);
         session.setDate(null);
         session.setVotes(5);
 

@@ -2,6 +2,8 @@ package lv.ctco.controllers;
 
 import lv.ctco.entities.KnowledgeSession;
 import lv.ctco.entities.Person;
+import lv.ctco.entities.UserRole;
+import lv.ctco.enums.SessionStatus;
 import lv.ctco.repository.PersonRepository;
 import lv.ctco.repository.SessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,8 +84,8 @@ public class SessionController {
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> addSession(@RequestBody KnowledgeSession session, UriComponentsBuilder b) {
+        session.setStatus(SessionStatus.PENDING);
         sessionRepository.save(session);
-        //todo add only pending
         UriComponents uriComponents =
                 b.path(SESSION_PATH + "/{id}").buildAndExpand(session.getId());
         HttpHeaders responseHeaders = new HttpHeaders();
@@ -105,7 +107,26 @@ public class SessionController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    //todo accept session by admin
+    @Transactional
+    @RequestMapping(path = "/{session_id}/admin", method = RequestMethod.GET)
+    public ResponseEntity<?> changeSessionStatusToApprovedByAdmin(@PathVariable("session_id") long sessionId,
+                                                Principal principal) {
+        Person loggedPerson = personRepository.findUserByLogin(principal.getName());
+        List<UserRole> roles = loggedPerson.getUserRoles();
+        for(UserRole role : roles){
+            if (role.getRole().compareTo("ADMIN") == 0){
+                if (sessionRepository.exists(sessionId)) {
+                    KnowledgeSession editedSession = sessionRepository.findOne(sessionId);
+                    editedSession.setStatus(SessionStatus.APPROVED);
+                    sessionRepository.save(editedSession);
+                    return new ResponseEntity<>(HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                }
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteSessionById(@PathVariable("id") long id) {
