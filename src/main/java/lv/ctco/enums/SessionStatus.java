@@ -3,5 +3,5 @@ package lv.ctco.enums;
 public enum SessionStatus {
     PENDING,
     DONE,
-    ACKNOWLEDGED
+    APPROVED
 }
