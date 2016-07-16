@@ -73,7 +73,8 @@ public class PersonController {
         return new ResponseEntity<>(currentPerson, HttpStatus.OK);
     }
 
-    @RequestMapping(path = "person", method = RequestMethod.GET)
+
+    @RequestMapping(path = "person/all", method = RequestMethod.GET)
     public ResponseEntity<?> getAllPersons() {
         List<Person> personList = personRepository.findAll();
         return new ResponseEntity<>(personList, HttpStatus.OK);

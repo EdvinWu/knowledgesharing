@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 
+import static lv.ctco.enums.SessionStatus.PENDING;
+
 
 @Component
 public class Initializer implements ApplicationListener<ContextRefreshedEvent> {
@@ -56,11 +58,11 @@ public class Initializer implements ApplicationListener<ContextRefreshedEvent> {
         session.setTitle("Learning");
         session.setDate(null);
         session.setVotes(5);
+        session.setStatus(PENDING);
 
         Tag tag = new Tag();
         tag.setName("java");
         session.setTags(Arrays.asList(tag));
-
 
 //        Feedback feedback = new Feedback();
 //        feedback.setComment("Disgusting");

@@ -2,6 +2,7 @@ package lv.ctco.controllers;
 
 import lv.ctco.entities.KnowledgeSession;
 import lv.ctco.entities.Person;
+import lv.ctco.enums.SessionStatus;
 import lv.ctco.repository.PersonRepository;
 import lv.ctco.repository.SessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ import java.security.Principal;
 import java.util.List;
 
 import static lv.ctco.Consts.*;
+import static lv.ctco.enums.SessionStatus.ACKNOWLEDGED;
+import static lv.ctco.enums.SessionStatus.DONE;
+import static lv.ctco.enums.SessionStatus.PENDING;
 
 @RestController
 @RequestMapping(SESSION_PATH)
@@ -81,14 +85,32 @@ public class SessionController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> addSession(@RequestBody KnowledgeSession session, UriComponentsBuilder b) {
+    public ResponseEntity<?> addPendingSession(@RequestBody KnowledgeSession session, UriComponentsBuilder b) {
+        session.setStatus(PENDING);
         sessionRepository.save(session);
-        //todo add only pending
         UriComponents uriComponents =
                 b.path(SESSION_PATH + "/{id}").buildAndExpand(session.getId());
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.setLocation(uriComponents.toUri());
         return new ResponseEntity<String>(responseHeaders, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(path = "/pending", method = RequestMethod.GET)
+    public ResponseEntity<?> getPendingSessions() {
+        List<KnowledgeSession> sessions = sessionRepository.findSessionByStatus(PENDING);
+        return new ResponseEntity<>(sessions, HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/done", method = RequestMethod.GET)
+    public ResponseEntity<?> getDoneSessions() {
+        List<KnowledgeSession> sessions = sessionRepository.findSessionByStatus(DONE);
+        return new ResponseEntity<>(sessions, HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/acknowledged", method = RequestMethod.GET)
+    public ResponseEntity<?> getAcknowledgedSessions() {
+        List<KnowledgeSession> sessions = sessionRepository.findSessionByStatus(ACKNOWLEDGED);
+        return new ResponseEntity<>(sessions, HttpStatus.OK);
     }
 
     @Transactional
@@ -105,7 +127,27 @@ public class SessionController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    //todo accept session by admin
+    @Transactional
+    @RequestMapping(path = "/{id}/tomakeacknowledged", method = RequestMethod.PUT)
+    public ResponseEntity<?> acknowledgeSession(@PathVariable("id") long id) {
+        if (sessionRepository.exists(id) && sessionRepository.findOne(id).getStatus().equals(PENDING)) {
+            KnowledgeSession session = sessionRepository.findOne(id);
+            session.setStatus(ACKNOWLEDGED);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @Transactional
+    @RequestMapping(path = "/{id}/tomakedone", method = RequestMethod.PUT)
+    public ResponseEntity<?> doneSession(@PathVariable("id") long id) {
+        if (sessionRepository.exists(id) && sessionRepository.findOne(id).getStatus().equals(ACKNOWLEDGED)) {
+            KnowledgeSession session = sessionRepository.findOne(id);
+            session.setStatus(DONE);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteSessionById(@PathVariable("id") long id) {
