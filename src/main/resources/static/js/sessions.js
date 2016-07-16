@@ -1,12 +1,12 @@
 function loadSessions(status) {
         
     if (status === undefined) {
-        status = 'pending';
+        status = 'all';
     }
 
     return $.ajax({
         type: 'GET',
-        url: 'http://localhost:8080/sessions/'+status,
+        url: 'http://localhost:8080/sessions/bystatus/'+ status,
         dataType: 'json',
         statusCode: {
             200: function (data) {
@@ -43,7 +43,6 @@ function drawSessionList(status) {
 }
 
 function addSession(event){
-
     $.ajax({
         type: 'POST',
         url: 'http://localhost:8080/sessions',
@@ -68,11 +67,10 @@ function addSession(event){
     window.location = "http://localhost:8080/allSessions.html";
 }
 
-function changeSessionStatus(event, id, action){
-    console.log(id);
+function changeSessionStatus(event, id, status){
     $.ajax({
         type: 'PUT',
-        url: 'http://localhost:8080/sessions/' + id + '/'  + action,
+        url: 'http://localhost:8080/sessions/' + id + '/changestatus/'  + status,
         statusCode: {
             200: function (data) {
                 drawSessionList();
@@ -85,7 +83,6 @@ function changeSessionStatus(event, id, action){
 }
 
 function removeElement(event, id){
-    console.log(id);
     $.ajax({
         type: 'DELETE',
         url: 'http://localhost:8080/sessions/' + id,
@@ -102,7 +99,6 @@ function removeElement(event, id){
 
 function exploreElement(event, id){
     window.location = "http://localhost:8080/sessionDetails.html/";
-    console.log(id);
     $.ajax({
         type: 'GET',
         url: 'http://localhost:8080/sessions/' + id,

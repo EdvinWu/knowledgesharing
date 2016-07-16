@@ -18,7 +18,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
     <script>
-        var status = '';
+        var status = 'all';
         $( document ).ready(function() {
             drawSessionList(status);
         });
@@ -57,15 +57,15 @@
            role="button">View Pending Sessions
         </a>
         <a class="btn btn-lg btn-primary"
-           onclick = drawSessionList('acknowledged')
-           role="button">View Acknowledged Sessions
+           onclick = drawSessionList('approved')
+           role="button">View Approved Sessions
         </a>
         <a class="btn btn-lg btn-primary"
            onclick = drawSessionList('done')
            role="button">View Done Sessions
         </a>
         <a class="btn btn-lg btn-primary"
-           onclick = drawSessionList('')
+           onclick = drawSessionList('all')
            role="button">View All Sessions
         </a>
     </div>
@@ -119,10 +119,10 @@
                         <a class="btn btn-default" href="#" role="button">Vote&raquo;</a>
                     </td>
                     <td>
-                        <a class="btn btn-default" onclick="changeSessionStatus(event, {{id}}, 'tomakeacknowledged')" role="button">Acknowledge</a>
+                        <a class="btn btn-default" onclick="changeSessionStatus(event, {{id}}, 'approved')" role="button">Approve</a>
                     </td>
                     <td>
-                        <a class="btn btn-default" onclick="changeSessionStatus(event, {{id}}, 'tomakedone')" role="button">To mark as done</a>
+                        <a class="btn btn-default" onclick="changeSessionStatus(event, {{id}}, 'done')" role="button">To mark as done</a>
                     </td>
                     <td>
                         <a class="btn btn-default" role="button" onclick="exploreElement(event, {{id}})" >Details&raquo;</a>

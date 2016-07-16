@@ -16,6 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.transaction.Transactional;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 import static lv.ctco.Consts.*;
@@ -74,7 +75,6 @@ public class SessionController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-
     @RequestMapping(path = "/{id}/attends", method = RequestMethod.GET)
     public ResponseEntity<?> getPersonsBySession(@PathVariable("id") long id) {
         KnowledgeSession session = sessionRepository.findOne(id);
@@ -96,21 +96,17 @@ public class SessionController {
         return new ResponseEntity<String>(responseHeaders, HttpStatus.CREATED);
     }
 
-    @RequestMapping(path = "/pending", method = RequestMethod.GET)
-    public ResponseEntity<?> getPendingSessions() {
-        List<KnowledgeSession> sessions = sessionRepository.findSessionByStatus(PENDING);
-        return new ResponseEntity<>(sessions, HttpStatus.OK);
-    }
-
-    @RequestMapping(path = "/done", method = RequestMethod.GET)
-    public ResponseEntity<?> getDoneSessions() {
-        List<KnowledgeSession> sessions = sessionRepository.findSessionByStatus(DONE);
-        return new ResponseEntity<>(sessions, HttpStatus.OK);
-    }
-
-    @RequestMapping(path = "/acknowledged", method = RequestMethod.GET)
-    public ResponseEntity<?> getAcknowledgedSessions() {
-        List<KnowledgeSession> sessions = sessionRepository.findSessionByStatus(APPROVED);
+    @RequestMapping(path = "bystatus/{status}", method = RequestMethod.GET)
+    public ResponseEntity<?> getSessionsByStatus(@PathVariable("status") String status) {
+        List<KnowledgeSession> sessions = new ArrayList<>();
+        if (status.equals("all"))
+            sessions = sessionRepository.findAll();
+        if (status.equals("pending"))
+            sessions = sessionRepository.findSessionByStatus(PENDING);
+        if (status.equals("approved"))
+            sessions = sessionRepository.findSessionByStatus(APPROVED);
+        if (status.equals("done"))
+            sessions = sessionRepository.findSessionByStatus(DONE);
         return new ResponseEntity<>(sessions, HttpStatus.OK);
     }
 
@@ -129,22 +125,18 @@ public class SessionController {
     }
 
     @Transactional
-    @RequestMapping(path = "/{id}/tomakeacknowledged", method = RequestMethod.PUT)
-    public ResponseEntity<?> acknowledgeSession(@PathVariable("id") long id) {
-        if (sessionRepository.exists(id) && sessionRepository.findOne(id).getStatus().equals(PENDING)) {
-            KnowledgeSession session = sessionRepository.findOne(id);
-            session.setStatus(APPROVED);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+    @RequestMapping(path = "/{id}/changestatus/{status}", method = RequestMethod.PUT)
+    public ResponseEntity<?> changeSessionStatus(@PathVariable("id") long id,
+                                                 @PathVariable("status") String statusWanted) {
 
-    @Transactional
-    @RequestMapping(path = "/{id}/tomakedone", method = RequestMethod.PUT)
-    public ResponseEntity<?> doneSession(@PathVariable("id") long id) {
-        if (sessionRepository.exists(id) && sessionRepository.findOne(id).getStatus().equals(APPROVED)) {
+        if (sessionRepository.exists(id)) {
             KnowledgeSession session = sessionRepository.findOne(id);
-            session.setStatus(DONE);
+            if (statusWanted.equals("approved") && session.getStatus().equals(PENDING)) {
+                session.setStatus(APPROVED);
+            }
+            if (statusWanted.equals("done") && session.getStatus().equals(APPROVED)) {
+                session.setStatus(DONE);
+            }
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
