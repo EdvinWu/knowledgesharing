@@ -110,6 +110,24 @@ public class SessionController {
     }
 
     @Transactional
+    @RequestMapping(path = "/{id}/changestatus/{status}", method = RequestMethod.PUT)
+    public ResponseEntity<?> changeSessionStatus(@PathVariable("id") long id,
+                                                 @PathVariable("status") String statusWanted) {
+
+        if (sessionRepository.exists(id)) {
+            KnowledgeSession session = sessionRepository.findOne(id);
+            if (statusWanted.equals("approved") && session.getStatus().equals(PENDING)) {
+                session.setStatus(APPROVED);
+            }
+            if (statusWanted.equals("done") && session.getStatus().equals(APPROVED)) {
+                session.setStatus(DONE);
+            }
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @Transactional
     @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity<?> updateSessionByID(@PathVariable("id") long id,
                                                @RequestBody KnowledgeSession session) {
