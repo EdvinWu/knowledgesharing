@@ -1,7 +1,11 @@
+var currentSessionView = "all";
+
 function loadSessions(status) {
         
     if (status === undefined) {
-        status = 'all';
+        status = currentSessionView;
+    } else {
+        currentSessionView = status;
     }
 
     return $.ajax({
@@ -22,7 +26,7 @@ function drawSessionList(status) {
         if (sessionList) {
             document.body.removeChild(sessionList.parentNode);
         }
-
+        
         var sessionListTemplate = Handlebars.compile(document.querySelector('#session-list').innerHTML);
         var sessionTemplate = Handlebars.compile(document.querySelector('#session').innerHTML);
 
@@ -34,6 +38,27 @@ function drawSessionList(status) {
         var sessionList = sessionListTemplate({
             body: sessionList
         });
+
+        var listTitle;
+        switch(currentSessionView)
+        {
+            case "done":
+                listTitle = "Done Sessions";
+                break;
+            case "pending":
+                listTitle = "Pending Sessions";
+                break;
+            case "approved":
+                listTitle = "Approved Sessions";
+                break;
+            default:
+                listTitle = "All Sessions";
+                break;
+        }
+        var elListTitle = document.getElementById("sessionListName");
+        if(elListTitle){
+            elListTitle.innerHTML = listTitle;
+        }
 
         var sessionListContainer = document.createElement('div');
         sessionListContainer.innerHTML = sessionList;

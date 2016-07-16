@@ -18,9 +18,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
     <script>
-        var status = 'all';
         $( document ).ready(function() {
-            drawSessionList(status);
+            drawSessionList();
         });
     </script>
 
@@ -49,7 +48,7 @@
 
 <div class="jumbotron">
     <div class="container">
-        <h2>Session List</h2>
+        <h2 id="sessionListName"></h2>
 
         <a class="btn btn-lg btn-primary" href="addSession.html" role="button">Propose New Session</a>
         <a class="btn btn-lg btn-primary"
@@ -81,17 +80,6 @@
 
 
 <div class="container" margin="0">
-    <table >
-        <col width="100">
-        <col width="100">
-        <col width="100">
-        <tr>
-            <th>Id</th>
-            <th>Title</th>
-            <th>Author</th>
-        </tr>
-    </table>
-
     <script id="session" type="text/x-handlebars-template">
         <div class="session">
             <table>
@@ -100,9 +88,9 @@
                 <col width="100">
                 <col width="100">
                 <col width="100">
+                <col width="200">
                 <col width="100">
                 <col width="100">
-
                 <tr>
                     <td>
                         {{id}}
@@ -114,7 +102,9 @@
                     <td>
                         {{author}}
                     </td>
-
+                    <td>
+                        {{status}}
+                    </td>
                     <td>
                         <a class="btn btn-default" href="#" role="button">Vote&raquo;</a>
                     </td>
