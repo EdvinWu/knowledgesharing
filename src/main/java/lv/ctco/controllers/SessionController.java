@@ -124,7 +124,7 @@ public class SessionController {
     }
 
     @Transactional
-    @RequestMapping(path = "/{session_id}/changestatus/done", method = RequestMethod.PUT)
+    @RequestMapping(path = "/{session_id}K/done", method = RequestMethod.PUT)
         public ResponseEntity<?> changeSessionStatusToDoneByAdmin(@PathVariable("session_id") long sessionId, Principal principal) {
         Person loggedPerson = personRepository.findUserByLogin(principal.getName());
         List<UserRole> roles = loggedPerson.getUserRoles();
