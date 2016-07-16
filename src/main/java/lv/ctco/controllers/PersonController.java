@@ -57,14 +57,19 @@ public class PersonController {
     @RequestMapping(path = "adduser/", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
     public ResponseEntity<?> userAdd(@RequestParam String username, String fullname, String password) {
         Person person = new Person();
-        person.setFullName(fullname);
-        person.setLogin(username);
-        person.setPassword(password);
-        UserRole userRole = new UserRole();
-        userRole.setRole("USER");
-        person.setUserRoles(Arrays.asList(userRole));
-        personRepository.save(person);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        Person newUser = personRepository.findUserByLogin(username);
+        if(newUser == null) {
+            person.setLogin(username);
+            person.setFullName(fullname);
+            person.setPassword(password);
+            UserRole userRole = new UserRole();
+            userRole.setRole("USER");
+            person.setUserRoles(Arrays.asList(userRole));
+            personRepository.save(person);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @RequestMapping(path = "person", method = RequestMethod.GET)
