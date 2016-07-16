@@ -59,7 +59,7 @@ public class PersonController {
         Person person = new Person();
         person.setFullName(fullname);
         person.setLogin(username);
-        person.setPassword(passwordEncoder.encode(password));
+        person.setPassword(password);
         UserRole userRole = new UserRole();
         userRole.setRole("USER");
         person.setUserRoles(Arrays.asList(userRole));
@@ -73,7 +73,7 @@ public class PersonController {
         return new ResponseEntity<>(currentPerson, HttpStatus.OK);
     }
 
-    @RequestMapping(path = "person/all", method = RequestMethod.GET)
+    @RequestMapping(path = "persons", method = RequestMethod.GET)
     public ResponseEntity<?> getAllPersons() {
         List<Person> personList = personRepository.findAll();
         return new ResponseEntity<>(personList, HttpStatus.OK);

@@ -125,7 +125,7 @@ public class SessionController {
 
     @Transactional
     @RequestMapping(path = "/{id}/changestatus/{status}", method = RequestMethod.PUT)
-    public ResponseEntity<?> changeSessionStatus(@PathVariable("id") long id,
+        public ResponseEntity<?> changeSessionStatus(@PathVariable("id") long id,
                                                  @PathVariable("status") String statusWanted) {
 
         if (sessionRepository.exists(id)) {
