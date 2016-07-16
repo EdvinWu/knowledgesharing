@@ -41,10 +41,9 @@ public class SessionController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @RequestMapping(path = TAG_PATH, method = RequestMethod.GET, consumes = "application/x-www-form-urlencoded")
+    @RequestMapping(path = TAG_PATH + "/tag", method = RequestMethod.GET)
      public ResponseEntity<?> getSessionByTag(@RequestParam String name) {
         List<KnowledgeSession> sessions;
-        name = "java";
         sessions = sessionRepository.findByTag(name);
         if (sessions != null) {
             return new ResponseEntity<>(sessions, HttpStatus.OK);
