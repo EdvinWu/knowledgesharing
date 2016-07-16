@@ -47,10 +47,9 @@ public class SessionController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @RequestMapping(path = TAG_PATH, method = RequestMethod.GET, consumes = "application/x-www-form-urlencoded")
+    @RequestMapping(path = TAG_PATH + "/tag", method = RequestMethod.GET)
      public ResponseEntity<?> getSessionByTag(@RequestParam String name) {
         List<KnowledgeSession> sessions;
-        name = "java";
         sessions = sessionRepository.findByTag(name);
         if (sessions != null) {
             return new ResponseEntity<>(sessions, HttpStatus.OK);
@@ -125,24 +124,26 @@ public class SessionController {
     }
 
     @Transactional
-    @RequestMapping(path = "/{id}/changestatus/{status}", method = RequestMethod.PUT)
-    public ResponseEntity<?> changeSessionStatus(@PathVariable("id") long id,
-                                                 @PathVariable("status") String statusWanted) {
-
-        if (sessionRepository.exists(id)) {
-            KnowledgeSession session = sessionRepository.findOne(id);
-            if (statusWanted.equals("approved") && session.getStatus().equals(PENDING)) {
-                session.setStatus(APPROVED);
+    @RequestMapping(path = "/{session_id}K/done", method = RequestMethod.PUT)
+        public ResponseEntity<?> changeSessionStatusToDoneByAdmin(@PathVariable("session_id") long sessionId, Principal principal) {
+        Person loggedPerson = personRepository.findUserByLogin(principal.getName());
+        List<UserRole> roles = loggedPerson.getUserRoles();
+        for (UserRole role : roles) {
+            if (role.getRole().compareTo("ADMIN") == 0) {
+                if (sessionRepository.exists(sessionId)) {
+                    KnowledgeSession editedSession = sessionRepository.findOne(sessionId);
+                    editedSession.setStatus(SessionStatus.DONE);
+                    sessionRepository.save(editedSession);
+                    return new ResponseEntity<>(HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                }
             }
-            if (statusWanted.equals("done") && session.getStatus().equals(APPROVED)) {
-                session.setStatus(DONE);
-            }
-            return new ResponseEntity<>(HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @RequestMapping(path = "/{session_id}/admin", method = RequestMethod.GET)
+    @RequestMapping(path = "/{session_id}/approved", method = RequestMethod.PUT)
     public ResponseEntity<?> changeSessionStatusToApprovedByAdmin(@PathVariable("session_id") long sessionId,
                                                 Principal principal) {
         Person loggedPerson = personRepository.findUserByLogin(principal.getName());
