@@ -2,6 +2,7 @@ package lv.ctco.controllers;
 
 import lv.ctco.entities.KnowledgeSession;
 import lv.ctco.entities.Person;
+import lv.ctco.entities.UserRole;
 import lv.ctco.enums.SessionStatus;
 import lv.ctco.repository.PersonRepository;
 import lv.ctco.repository.SessionRepository;
@@ -18,7 +19,7 @@ import java.security.Principal;
 import java.util.List;
 
 import static lv.ctco.Consts.*;
-import static lv.ctco.enums.SessionStatus.ACKNOWLEDGED;
+import static lv.ctco.enums.SessionStatus.APPROVED;
 import static lv.ctco.enums.SessionStatus.DONE;
 import static lv.ctco.enums.SessionStatus.PENDING;
 
@@ -109,7 +110,7 @@ public class SessionController {
 
     @RequestMapping(path = "/acknowledged", method = RequestMethod.GET)
     public ResponseEntity<?> getAcknowledgedSessions() {
-        List<KnowledgeSession> sessions = sessionRepository.findSessionByStatus(ACKNOWLEDGED);
+        List<KnowledgeSession> sessions = sessionRepository.findSessionByStatus(APPROVED);
         return new ResponseEntity<>(sessions, HttpStatus.OK);
     }
 
@@ -132,7 +133,7 @@ public class SessionController {
     public ResponseEntity<?> acknowledgeSession(@PathVariable("id") long id) {
         if (sessionRepository.exists(id) && sessionRepository.findOne(id).getStatus().equals(PENDING)) {
             KnowledgeSession session = sessionRepository.findOne(id);
-            session.setStatus(ACKNOWLEDGED);
+            session.setStatus(APPROVED);
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -141,12 +142,32 @@ public class SessionController {
     @Transactional
     @RequestMapping(path = "/{id}/tomakedone", method = RequestMethod.PUT)
     public ResponseEntity<?> doneSession(@PathVariable("id") long id) {
-        if (sessionRepository.exists(id) && sessionRepository.findOne(id).getStatus().equals(ACKNOWLEDGED)) {
+        if (sessionRepository.exists(id) && sessionRepository.findOne(id).getStatus().equals(APPROVED)) {
             KnowledgeSession session = sessionRepository.findOne(id);
             session.setStatus(DONE);
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @RequestMapping(path = "/{session_id}/admin", method = RequestMethod.GET)
+    public ResponseEntity<?> changeSessionStatusToApprovedByAdmin(@PathVariable("session_id") long sessionId,
+                                                Principal principal) {
+        Person loggedPerson = personRepository.findUserByLogin(principal.getName());
+        List<UserRole> roles = loggedPerson.getUserRoles();
+        for(UserRole role : roles){
+            if (role.getRole().compareTo("ADMIN") == 0){
+                if (sessionRepository.exists(sessionId)) {
+                    KnowledgeSession editedSession = sessionRepository.findOne(sessionId);
+                    editedSession.setStatus(SessionStatus.APPROVED);
+                    sessionRepository.save(editedSession);
+                    return new ResponseEntity<>(HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                }
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
