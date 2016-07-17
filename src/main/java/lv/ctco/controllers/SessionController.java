@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -188,5 +190,16 @@ public class SessionController {
         }
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
+    @RequestMapping("/viewall")
+    public String viewAllSessions(Model model) {
+
+        List<KnowledgeSession> sessions = sessionRepository.findAll();
+        model.addAttribute("sessions", sessions);
+
+        return "index2.html";
+    }
+
+
 }
 
