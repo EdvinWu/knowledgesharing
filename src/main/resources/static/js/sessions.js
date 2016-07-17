@@ -89,7 +89,7 @@ function addSession(event){
         }
     });
     event.preventDefault();
-    window.location = "http://localhost:8080/indexnew.html";
+    window.location = "http://localhost:8080/index.html";
 }
 
 function changeSessionStatus(event, id, status){

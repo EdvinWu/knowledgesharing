@@ -1,77 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
-          integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-            integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
-            crossorigin="anonymous"></script>
+    <title>Knowledge Sharing</title>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
-    <title>KnowledgeSharing</title>
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <script src="js/handlebars.js"></script>
+    <script src="js/sessions.js"></script>
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <script src="js/handlebars.js"></script>
-    <script src="js/sessions.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
     <script>
-        $(document).ready(function () {
-            drawSessionList('approved');
+        var status = 'all';
+        $( document ).ready(function() {
+            drawSessionList(status);
         });
     </script>
 
     <script type="text/javascript">
-        function Redirect(address) {
+        function redirect(address) {
             window.location = "http://localhost:8080/" + address;
         }
 
     </script>
+
 </head>
 
 <body>
+<!--...<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> -->
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-                    aria-expanded="false" aria-controls="navbar">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">KnowledgeSharing</a>
+            <a class="navbar-brand" href="index.html">KnowledgeSharing</a>
             <ul class="nav navbar-nav">
-                <li class="active"><a href="/allSessions.html">Sessions</a></li>
+                <li class="active"><a href="/index.html">Sessions</a></li>
                 <li><a href="/profile.html">Profile</a></li>
             </ul>
         </div>
     </div>
 </nav>
 
-
-<!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
     <div class="container">
         <h1>Hello, world!</h1>
         <p>Some greeting text.</p>
-        <button type="button" onclick="drawSessionList('approved')" class="btn btn-lg btn-primary">View approved sessions</button>
-        <button type="button" onclick="drawSessionList('all')" class="btn btn-lg btn-primary">View all sessions</button>
-        <button type="button" onclick="Redirect('addSession.html')" class="btn btn-lg btn-primary">Propose session
-        </button>
+
+        <a class="btn btn-lg btn-primary" href="addSession.html" role="button">Propose New Session</a>
+        <a class="btn btn-lg btn-primary"
+           onclick = "drawSessionList('pending');"
+           role="button">View Pending Sessions
+        </a>
+        <a class="btn btn-lg btn-primary"
+           onclick = drawSessionList('approved')
+           role="button">View Approved Sessions
+        </a>
+        <a class="btn btn-lg btn-primary"
+           onclick = drawSessionList('done')
+           role="button">View Done Sessions
+        </a>
+        <a class="btn btn-lg btn-primary"
+           onclick = drawSessionList('all')
+           role="button">View All Sessions
+        </a>
+        <a class="btn btn-lg btn-primary"
+           onclick = redirect('allSessions.html');
+           role="button">Admin controls
+        </a>
     </div>
 </div>
 
@@ -89,33 +97,99 @@
                 </div><!-- /input-group -->
             </div><!-- /.col-lg-6 -->
         </div><!-- /.row -->
+        <div>
+            <h2 id="sessionListName"></h2>
+        </div>
     </form>
 </div>
 
 <hr>
-<div>
-    <h2 id="sessionListName"></h2>
-</div>
+
 
 <script id="session-list" type="text/x-handlebars-template">
-    <div class="session-list">
-        {{{body}}}
+    <div class="container session-list">
+        <div class="row">
+            {{{body}}}
+        </div>
     </div>
 </script>
 
 <script id="session" type="text/x-handlebars-template">
-    <div class="session col-md-4">
+    <div class="col-lg-3">
         <h2>{{title}}</h2>
         <p>{{author}}</p>
         <p><a class="btn btn-default" href="#" role="button">Vote&raquo;</a></p>
         <p><a class="btn btn-default" href="#" role="button">Subscribe&raquo;</a></p>
-        <p><a class="btn btn-default" href="#" role="button">Details&raquo;</a></p>
+        <p><a class="btn btn-default" onclick="exploreElement(event, {{id}})"
+              role="button">Details&raquo;</a>
+        </p>
     </div>
 </script>
 
-<hr>
+<!--<table >-->
+<!--<col width="100">-->
+<!--<col width="100">-->
+<!--<col width="100">-->
+<!--<tr>-->
+<!--<th>Id</th>-->
+<!--<th>Title</th>-->
+<!--<th>Author</th>-->
+<!--</tr>-->
+<!--</table>-->
 
-</div> <!-- /container -->
+<!--<script id="session" type="text/x-handlebars-template">-->
+<!--<div class="session">-->
+<!--<table>-->
+<!--<col width="100">-->
+<!--<col width="100">-->
+<!--<col width="100">-->
+<!--<col width="100">-->
+<!--<col width="100">-->
+<!--<col width="100">-->
+<!--<col width="100">-->
+
+<!--<tr>-->
+<!--<td>-->
+<!--{{id}}-->
+<!--</td>-->
+<!--<td>-->
+<!--{{title}}-->
+<!--</td>-->
+
+<!--<td>-->
+<!--{{author}}-->
+<!--</td>-->
+
+<!--<td>-->
+<!--<a class="btn btn-default" href="#" role="button">Vote&raquo;</a>-->
+<!--</td>-->
+<!--<td>-->
+<!--<a class="btn btn-default" onclick="changeSessionStatus(event, {{id}}, 'approved')" role="button">Approve</a>-->
+<!--</td>-->
+<!--<td>-->
+<!--<a class="btn btn-default" onclick="changeSessionStatus(event, {{id}}, 'done')" role="button">To mark as done</a>-->
+<!--</td>-->
+<!--<td>-->
+<!--<a class="btn btn-default" role="button" onclick="exploreElement(event, {{id}})" >Details&raquo;</a>-->
+<!--</td>-->
+<!--<td>-->
+<!--<a class="btn btn-default" onclick="removeElement(event, {{id}})">Delete&raquo;</a>-->
+<!--</td>-->
+
+<!--</tr>-->
+
+<!--</table>-->
+
+<!--</div>-->
+<!--</script>-->
+
+<!--</div>-->
+
+<footer class="navbar-fixed-bottom">
+    <p class="text-center">&copy; 2016 JAVA School</p>
+</footer>
 
 </body>
+
+
 </html>

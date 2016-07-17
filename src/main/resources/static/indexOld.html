@@ -1,40 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>User's offers</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+          integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+            integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+            crossorigin="anonymous"></script>
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="styles.css">
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
 
-    <script src="js/handlebars.js"></script>
-    <script src="js/sessions.js"></script>
+    <title>KnowledgeSharing</title>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <script src="js/handlebars.js"></script>
+    <script src="js/sessions.js"></script>
+
     <script>
-        $( document ).ready(function() {
-            drawSessionList();
+        $(document).ready(function () {
+            drawSessionList('approved');
         });
+    </script>
+
+    <script type="text/javascript">
+        function Redirect(address) {
+            window.location = "http://localhost:8080/" + address;
+        }
+
     </script>
 </head>
 
 <body>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="indexOld.html">KnowledgeSharing</a>
+            <a class="navbar-brand" href="#">KnowledgeSharing</a>
             <ul class="nav navbar-nav">
                 <li class="active"><a href="/allSessions.html">Sessions</a></li>
                 <li><a href="/profile.html">Profile</a></li>
@@ -43,101 +62,60 @@
     </div>
 </nav>
 
+
+<!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
     <div class="container">
-        <h2>Session List</h2>
+        <h1>Hello, world!</h1>
+        <p>Some greeting text.</p>
+        <button type="button" onclick="drawSessionList('approved')" class="btn btn-lg btn-primary">View approved sessions</button>
+        <button type="button" onclick="drawSessionList('all')" class="btn btn-lg btn-primary">View all sessions</button>
+        <button type="button" onclick="Redirect('addSession.html')" class="btn btn-lg btn-primary">Propose session
+        </button>
     </div>
 </div>
 
-<form name="f" action="http://localhost:8080/sessions/tag" method="get"
-      enctype="application/x-www-form-urlencoded">
-    <div class="row">
-        <div class="col-xs-12 col-sm-4" style="margin-left: 370px;">
-            <div class="form-group">
-                <label> tag: </label>
-                <input type="text" name="tagname" id="tagname" class="form-control"
-                       placeholder="Enter your tag here" pattern=".{4,}"
-                       title="search by tag">
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12 col-sm-4 col-md-4" style="margin-left: 510px;">
-            <div class="form-group">
-                <button type="submit" class="btn btn-success">search by tag</button>
-            </div>
-        </div>
-    </div>
-</form>
+<hr>
 
+<div class="container">
+    <form role="form" action="http://localhost:8080/sessions/tag/tag" method="get">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    <input name="name" type="text" class="form-control" placeholder="Search for...">
+      <span class="input-group-btn">
+        <button class="btn btn-primary" type="submit">Search By Tag</button>
+      </span>
+                </div><!-- /input-group -->
+            </div><!-- /.col-lg-6 -->
+        </div><!-- /.row -->
+    </form>
+</div>
+
+<hr>
+<div>
+    <h2 id="sessionListName"></h2>
+</div>
 
 <script id="session-list" type="text/x-handlebars-template">
     <div class="session-list">
-        <div>
-            {{{body}}}
-        </div>
+        {{{body}}}
     </div>
 </script>
-
-
-<div class="container" margin="0">
-    <table >
-        <col width="100">
-        <col width="100">
-        <col width="100">
-        <tr>
-            <th>Id</th>
-            <th>Title</th>
-            <th>Author</th>
-        </tr>
-    </table>
 
 <script id="session" type="text/x-handlebars-template">
-    <div class="session">
-        <table>
-            <col width="100">
-            <col width="100">
-            <col width="100">
-            <col width="100">
-            <col width="100">
-            <col width="100">
-            <col width="100">
-
-            <tr>
-                <td>
-                    {{id}}
-                </td>
-                <td>
-                    {{title}}
-                </td>
-
-                <td>
-                    {{author}}
-                </td>
-
-                <td>
-                    <a class="btn btn-default" href="#" role="button">Vote&raquo;</a>
-                </td>
-                <td>
-                    <a class="btn btn-default" href="#" role="button">Subscribe&raquo;</a>
-                </td>
-                <td>
-                    <a class="btn btn-default" href="#" role="button">Details&raquo;</a>
-                </td>
-                <td>
-                    <a class="btn btn-default" onclick="removeElement(event, {{id}})">Details&raquo;</a>
-                </td>
-
-
-            </tr>
-
-        </table>
-
+    <div class="session col-md-4">
+        <h2>{{title}}</h2>
+        <p>{{author}}</p>
+        <p><a class="btn btn-default" href="#" role="button">Vote&raquo;</a></p>
+        <p><a class="btn btn-default" href="#" role="button">Subscribe&raquo;</a></p>
+        <p><a class="btn btn-default" href="#" role="button">Details&raquo;</a></p>
     </div>
 </script>
 
-</div>
+<hr>
+
+</div> <!-- /container -->
 
 </body>
-
 </html>
