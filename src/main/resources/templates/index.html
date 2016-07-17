@@ -23,6 +23,11 @@
             drawSessionList(status);
         });
     </script>
+    <script type="text/javascript">
+        function redirect(address) {
+            window.location = "http://localhost:8080/" + address;
+        }
+    </script>
 
 </head>
 
@@ -89,10 +94,11 @@
         <h2>{{title}}</h2>
         <p>{{author}}</p>
         <p><a class="btn btn-default" href="#" role="button">Vote&raquo;</a></p>
-        <p><a class="btn btn-default" href="#" role="button">Subscribe&raquo;</a></p>
-        <p><a class="btn btn-default" onclick="exploreElement(event, {{id}})"
-              role="button">Details&raquo;</a>
-        </p>
+        <p><a class="btn btn-default" href="#" role="button">Subscribe/Join&raquo;</a></p>
+        <p><a class="btn btn-default" href="sessionDetails.html?id={{id}}" role="button">Details&raquo;</a></p>
+        <p><a class="btn btn-default" onclick="changeSessionStatus(event, {{id}}, 'approved')" role="button">Approve</a></p>
+        <p><a class="btn btn-default" onclick="changeSessionStatus(event, {{id}}, 'done')" role="button">Mark as done</a></p>
+        <p><a class="btn btn-default" onclick="removeElement(event, {{id}})">Delete&raquo;</a></p>
     </div>
 </script>
 
