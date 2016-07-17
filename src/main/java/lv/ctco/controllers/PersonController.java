@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
@@ -54,8 +56,10 @@ public class PersonController {
     }
 
     @Transactional
-    @RequestMapping(path = "adduser/", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
-    public ResponseEntity<?> userAdd(@RequestParam String username, String fullname, String password) {
+    @RequestMapping(path = "adduser", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
+    public ResponseEntity<?> userAdd(@RequestParam String username,
+                                                    String fullname,
+                                                    String password){
         Person person = new Person();
         Person newUser = personRepository.findUserByLogin(username);
         if(newUser == null) {
@@ -66,6 +70,9 @@ public class PersonController {
             userRole.setRole("USER");
             person.setUserRoles(Arrays.asList(userRole));
             personRepository.save(person);
+//            URI linkLogin = new URI("htttp://localhost:8080/login");
+//            HttpHeaders httpHeaders = new HttpHeaders();
+//            httpHeaders.setLocation(linkLogin);
             return new ResponseEntity<>(HttpStatus.CREATED);
         }else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

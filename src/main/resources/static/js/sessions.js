@@ -89,8 +89,21 @@ function addSession(event){
         }
     });
     event.preventDefault();
-    window.location = "http://localhost:8080/indexnew.html";
+    window.location = "http://localhost:8080/index";
 }
+
+function addUser(event){
+    $.post("/adduser", $("#registrationform").serialize())
+        .fail(function () {
+            console.log("error")
+        })
+        .done(function () {
+            window.location = "http://localhost:8080/login";
+        });
+    event.preventDefault();
+}
+
+
 
 function changeSessionStatus(event, id, status){
     $.ajax({
@@ -123,7 +136,7 @@ function removeElement(event, id){
 }
 
 function exploreElement(event, id){
-    window.location = "http://localhost:8080/sessionDetails.html/";
+    window.location = "http://localhost:8080/sessionDetails";
     $.ajax({
         type: 'GET',
         url: 'http://localhost:8080/sessions/' + id,

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>User's offers</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="styles.css">
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" type="text/css" href="styles.css"/>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
     <script src="js/handlebars.js"></script>
@@ -29,57 +29,41 @@
 <body>
 <!--...<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> -->
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="indexnew.html">KnowledgeSharing</a>
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="/index.html">Sessions</a></li>
-                <li><a href="/profile.html">Profile</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<nav th:replace="fragments/header :: header('index')"></nav>
 
 <div class="jumbotron">
     <div class="container">
         <h1>Hello, world!</h1>
         <p>Some greeting text.</p>
 
-        <a class="btn btn-lg btn-primary" href="addSession.html" role="button">Propose New Session</a>
+        <a class="btn btn-lg btn-primary" href="addSession" role="button">Propose New Session</a>
         <a class="btn btn-lg btn-primary"
            onclick = "drawSessionList('pending');"
            role="button">View Pending Sessions
         </a>
         <a class="btn btn-lg btn-primary"
-           onclick = drawSessionList('approved')
+           onclick = "drawSessionList('approved')"
            role="button">View Approved Sessions
         </a>
         <a class="btn btn-lg btn-primary"
-           onclick = drawSessionList('done')
+           onclick = "drawSessionList('done')"
            role="button">View Done Sessions
         </a>
         <a class="btn btn-lg btn-primary"
-           onclick = drawSessionList('all')
+           onclick = "drawSessionList('all')"
            role="button">View All Sessions
         </a>
     </div>
 </div>
 
-<hr>
+<hr/>
 
 <div class="container">
     <form role="form" action="http://localhost:8080/sessions/tag/tag" method="get">
         <div class="row">
             <div class="col-lg-6">
                 <div class="input-group">
-                    <input name="name" type="text" class="form-control" placeholder="Search for...">
+                    <input name="name" type="text" class="form-control" placeholder="Search for..."/>
       <span class="input-group-btn">
         <button class="btn btn-primary" type="submit">Search By Tag</button>
       </span>
@@ -89,7 +73,7 @@
     </form>
 </div>
 
-<hr>
+<hr/>
 
 
 <script id="session-list" type="text/x-handlebars-template">

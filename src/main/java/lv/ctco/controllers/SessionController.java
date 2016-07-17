@@ -144,7 +144,7 @@ public class SessionController {
     }
 
     @Transactional
-    @RequestMapping(path = "/{session_id}K/done", method = RequestMethod.PUT)
+    @RequestMapping(path = "/{session_id}/done", method = RequestMethod.PUT)
         public ResponseEntity<?> changeSessionStatusToDoneByAdmin(@PathVariable("session_id") long sessionId, Principal principal) {
         Person loggedPerson = personRepository.findUserByLogin(principal.getName());
         List<UserRole> roles = loggedPerson.getUserRoles();
@@ -210,16 +210,6 @@ public class SessionController {
         }
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
-    @RequestMapping("/viewall")
-    public String viewAllSessions(Model model) {
-
-        List<KnowledgeSession> sessions = sessionRepository.findAll();
-        model.addAttribute("sessions", sessions);
-
-        return "index2.html";
-    }
-
 
 }
 

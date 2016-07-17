@@ -23,8 +23,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests()
-                .antMatchers("/asderty/**").authenticated().and().formLogin()
-                .loginPage("/login.html")
+                .antMatchers("qwer").authenticated().and().formLogin()
+                .loginPage("/login")
                 .permitAll().and()
                 .httpBasic().and()
                 .logout().logoutSuccessUrl("/login?logut").and()
