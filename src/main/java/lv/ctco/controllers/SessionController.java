@@ -112,20 +112,6 @@ public class SessionController {
     }
 
     @Transactional
-    @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<?> updateSessionByID(@PathVariable("id") long id,
-                                               @RequestBody KnowledgeSession session) {
-        if (sessionRepository.exists(id)) {
-            KnowledgeSession editedSession = sessionRepository.findOne(id);
-            editedSession.setAuthor(session.getAuthor());
-            editedSession.setTitle(session.getTitle());
-            editedSession.setVotes(session.getVotes());
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @Transactional
     @RequestMapping(path = "/{id}/changestatus/{status}", method = RequestMethod.PUT)
     public ResponseEntity<?> changeSessionStatus(@PathVariable("id") long id,
                                                  @PathVariable("status") String statusWanted) {
@@ -143,7 +129,41 @@ public class SessionController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @RequestMapping(path = "/{session_id}/admin", method = RequestMethod.GET)
+    @Transactional
+    @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<?> updateSessionByID(@PathVariable("id") long id,
+                                               @RequestBody KnowledgeSession session) {
+        if (sessionRepository.exists(id)) {
+            KnowledgeSession editedSession = sessionRepository.findOne(id);
+            editedSession.setAuthor(session.getAuthor());
+            editedSession.setTitle(session.getTitle());
+            editedSession.setVotes(session.getVotes());
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @Transactional
+    @RequestMapping(path = "/{session_id}K/done", method = RequestMethod.PUT)
+        public ResponseEntity<?> changeSessionStatusToDoneByAdmin(@PathVariable("session_id") long sessionId, Principal principal) {
+        Person loggedPerson = personRepository.findUserByLogin(principal.getName());
+        List<UserRole> roles = loggedPerson.getUserRoles();
+        for (UserRole role : roles) {
+            if (role.getRole().compareTo("ADMIN") == 0) {
+                if (sessionRepository.exists(sessionId)) {
+                    KnowledgeSession editedSession = sessionRepository.findOne(sessionId);
+                    editedSession.setStatus(SessionStatus.DONE);
+                    sessionRepository.save(editedSession);
+                    return new ResponseEntity<>(HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                }
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @RequestMapping(path = "/{session_id}/approved", method = RequestMethod.PUT)
     public ResponseEntity<?> changeSessionStatusToApprovedByAdmin(@PathVariable("session_id") long sessionId,
                                                 Principal principal) {
         Person loggedPerson = personRepository.findUserByLogin(principal.getName());

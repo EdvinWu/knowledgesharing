@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
@@ -15,24 +17,19 @@
 
     <title>Jumbotron Template for Bootstrap</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="jumbotron.css" rel="stylesheet">
-
-    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
-
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <script src="js/handlebars.js"></script>
+    <script src="js/sessions.js"></script>
+
+    <script>
+        $( document ).ready(function() {
+            drawSessionList();
+        });
+    </script>
 </head>
 
 <body>
@@ -64,36 +61,13 @@
     </div>
 </div>
 
-<div class="container">
-    <!-- Example row of columns -->
-    <div class="row">
-        <h2>Visited sessions</h2>
-        <div class="col-md-4">
-            <h2>Session name</h2>
-            <p>Session description</p>
-            <p><a class="btn btn-default" href="#" role="button">Details&raquo;</a></p>
-        </div>
-        <div class="col-md-4">
-            <h2>Session name</h2>
-            <p>Session description</p>
-            <p><a class="btn btn-default" href="#" role="button">Details&raquo;</a></p>
-        </div>
-        <div class="col-md-4">
-            <h2>Session name</h2>
-            <p>Session description</p>
-            <p><a class="btn btn-default" href="#" role="button">Details&raquo;</a></p>
-        </div>
-        <div class="col-md-4">
-            <h2>Session name</h2>
-            <p>Session description</p>
-            <p><a class="btn btn-default" href="#" role="button">Details&raquo;</a></p>
-        </div>
-        <div class="col-md-4">
-            <h2>Session name</h2>
-            <p>Session description</p>
-            <p><a class="btn btn-default" href="#" role="button">Details&raquo;</a></p>
-        </div>
+<script id="session-list" type="text/x-handlebars-template">
+    <div class="session-list">
+            <h2>Visited sessions</h2>
+            {{{body}}}
     </div>
+</script>
+
 
     <hr>
 
@@ -103,13 +77,6 @@
     <p class="text-center">&copy; 2016 JAVA School</p>
 </footer>
 
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-<script src="../../dist/js/bootstrap.min.js"></script>
-<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+
 </body>
 </html>
