@@ -180,10 +180,17 @@ public class SessionController {
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteSessionById(@PathVariable("id") long id) {
-        if (sessionRepository.exists(id)) {
-            sessionRepository.delete(id);
-            return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<?> deleteSessionById(@PathVariable("id") long id, Principal principal) {
+        Person loggedPerson = personRepository.findUserByLogin(principal.getName());
+        List<UserRole> roles = loggedPerson.getUserRoles();
+        for (UserRole role : roles) {
+            if (role.getRole().compareTo("ADMIN") == 0) {
+                if (sessionRepository.exists(id)) {
+                    sessionRepository.delete(id);
+                    return new ResponseEntity<>(HttpStatus.OK);
+                }
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
