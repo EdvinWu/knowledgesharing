@@ -150,6 +150,20 @@ public class SessionController {
     }
 
     @Transactional
+    @RequestMapping(path = "/{id}/votes", method = RequestMethod.PUT)
+    public ResponseEntity<?> updateSessionVotesByID(@PathVariable("id") long id) {
+        if (sessionRepository.exists(id)) {
+            KnowledgeSession editedSession = sessionRepository.findOne(id);
+            int votes = editedSession.getVotes();
+            editedSession.setVotes(++votes);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+
+
+    @Transactional
     @RequestMapping(path = "/{session_id}/done", method = RequestMethod.PUT)
         public ResponseEntity<?> changeSessionStatusToDoneByAdmin(@PathVariable("session_id") long sessionId, Principal principal) {
         Person loggedPerson = personRepository.findUserByLogin(principal.getName());
@@ -200,21 +214,24 @@ public class SessionController {
 
     @RequestMapping(path = "/{sessionId}/user", method = RequestMethod.POST)
     public ResponseEntity<?> addPersonToSession(@PathVariable("sessionId") long sessionId,
-                                                Principal principal){
+                                                Person user){
         if(sessionRepository.exists(sessionId)){
             KnowledgeSession session = sessionRepository.findOne(sessionId);
-            Person inputPerson = personRepository.findUserByLogin(principal.getName());
-            for(Person person : session.getPersons()){
-                if(person.getId() == inputPerson.getId()){
-                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            if (session.getStatus().equals(SessionStatus.APPROVED)) {
+                Person inputPerson = personRepository.findUserByLogin(user.getLogin());
+                for(Person person : session.getPersons()){
+                    if(person.getId() == inputPerson.getId()){
+                        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                    }
                 }
+                List<Person> sessionPersons = session.getPersons();
+                sessionPersons.add(inputPerson);
+                session.setPersons(sessionPersons);
+                sessionRepository.save(session);
+                return new ResponseEntity<>(HttpStatus.CREATED);
             }
-            List<Person> sessionPersons = session.getPersons();
-            sessionPersons.add(inputPerson);
-            session.setPersons(sessionPersons);
-            sessionRepository.save(session);
         }
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
 }

@@ -131,6 +131,30 @@ function changeSessionStatus(event, id, status) {
 
 }
 
+function changeSessionVotes(event, id) {
+    $.ajax({
+        type: 'PUT',
+        url: 'http://localhost:8080/sessions/' + id + '/votes',
+        statusCode: {
+            200: function () {
+            }
+        }
+    });
+    event.preventDefault();
+}
+
+//function addUserToSessionById(event, id, user) {
+//    $.post("/{id}/user", user)
+//        .fail(function () {
+//            console.log("error")
+//        })
+//        .done(function () {
+//            window.location = "http://localhost:8080/index";
+//        });
+//    event.preventDefault();
+//
+//}
+
 function removeElement(event, id) {
     $.ajax({
         type: 'DELETE',

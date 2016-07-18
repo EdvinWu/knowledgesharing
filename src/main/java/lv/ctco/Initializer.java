@@ -62,6 +62,7 @@ public class Initializer implements ApplicationListener<ContextRefreshedEvent> {
         session.setStatus(SessionStatus.PENDING);
         session.setDate(null);
         session.setVotes(5);
+        session.setDescription("WE LOVE JAVA");
         session.setStatus(PENDING);
 
         Tag tag = new Tag();

@@ -96,8 +96,8 @@
     <div class="col-lg-3">
         <h2>{{title}}</h2>
         <p>{{author}}</p>
-        <p><a class="btn btn-default" href="#" role="button">Vote&raquo;</a></p>
-        <p><a class="btn btn-default" href="#" role="button">Subscribe/Join&raquo;</a></p>
+        <p><a class="btn btn-default" onclick="changeSessionVotes(event, {{id}})" role="button">Vote&raquo;</a></p>
+        <p><a class="btn btn-default" href="" role="button">Subscribe/Join&raquo;</a></p>
         <p><a class="btn btn-default" href="sessionDetails.html?id={{id}}" role="button">Details&raquo;</a></p>
         <p><a  class="btn btn-default" onclick="changeSessionStatus(event, {{id}}, 'approved')" role="button">Approve</a></p>
         <p><a class="btn btn-default" onclick="changeSessionStatus(event, {{id}}, 'done')" role="button">Mark as done</a></p>
@@ -105,69 +105,6 @@
     </div>
 </script>
 
-
-
-
-
-
-<!--<table >-->
-<!--<col width="100">-->
-<!--<col width="100">-->
-<!--<col width="100">-->
-<!--<tr>-->
-<!--<th>Id</th>-->
-<!--<th>Title</th>-->
-<!--<th>Author</th>-->
-<!--</tr>-->
-<!--</table>-->
-
-<!--<script id="session" type="text/x-handlebars-template">-->
-<!--<div class="session">-->
-<!--<table>-->
-<!--<col width="100">-->
-<!--<col width="100">-->
-<!--<col width="100">-->
-<!--<col width="100">-->
-<!--<col width="100">-->
-<!--<col width="100">-->
-<!--<col width="100">-->
-
-<!--<tr>-->
-<!--<td>-->
-<!--{{id}}-->
-<!--</td>-->
-<!--<td>-->
-<!--{{title}}-->
-<!--</td>-->
-
-<!--<td>-->
-<!--{{author}}-->
-<!--</td>-->
-
-<!--<td>-->
-<!--<a class="btn btn-default" href="#" role="button">Vote&raquo;</a>-->
-<!--</td>-->
-<!--<td>-->
-<!--<a class="btn btn-default" onclick="changeSessionStatus(event, {{id}}, 'approved')" role="button">Approve</a>-->
-<!--</td>-->
-<!--<td>-->
-<!--<a class="btn btn-default" onclick="changeSessionStatus(event, {{id}}, 'done')" role="button">To mark as done</a>-->
-<!--</td>-->
-<!--<td>-->
-<!--<a class="btn btn-default" role="button" onclick="exploreElement(event, {{id}})" >Details&raquo;</a>-->
-<!--</td>-->
-<!--<td>-->
-<!--<a class="btn btn-default" onclick="removeElement(event, {{id}})">Delete&raquo;</a>-->
-<!--</td>-->
-
-<!--</tr>-->
-
-<!--</table>-->
-
-<!--</div>-->
-<!--</script>-->
-
-<!--</div>-->
 
 <footer class="navbar-fixed-bottom">
     <p class="text-center">&copy; 2016 JAVA School</p>
