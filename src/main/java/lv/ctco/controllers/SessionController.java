@@ -77,9 +77,9 @@ public class SessionController {
 
         Person person = personRepository.findOne(idUser);
         KnowledgeSession session = sessionRepository.findOne(idSession);
-        List<Person> personList = session.getPersons();
+        List<Person> personList = session.getPersonsAttending();
         personList.add(person);
-        session.setPersons(personList);
+        session.setPersonsAttending(personList);
         sessionRepository.save(session);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -88,7 +88,7 @@ public class SessionController {
     @RequestMapping(path = "/{id}/attends", method = RequestMethod.GET)
     public ResponseEntity<?> getPersonsBySession(@PathVariable("id") long id) {
         KnowledgeSession session = sessionRepository.findOne(id);
-        List<Person> persons = session.getPersons();
+        List<Person> persons = session.getPersonsAttending();
         if (persons != null) {
             return new ResponseEntity<>(persons, HttpStatus.OK);
         }
@@ -159,14 +159,24 @@ public class SessionController {
 
     @Transactional
     @RequestMapping(path = "/{id}/votes", method = RequestMethod.PUT)
-    public ResponseEntity<?> updateSessionVotesByID(@PathVariable("id") long id) {
+    public ResponseEntity<?> updateSessionVotesByID(@PathVariable("id") long id, Principal principal) {
+        Person loggedPerson = personRepository.findUserByLogin(principal.getName());
+        KnowledgeSession knowledgeSession = sessionRepository.findOne(id);
         if (sessionRepository.exists(id)) {
-            KnowledgeSession editedSession = sessionRepository.findOne(id);
-            int votes = editedSession.getVotes();
-            editedSession.setVotes(++votes);
+            for (Person person : knowledgeSession.getPersonsVoted()) {
+                if(person.equals(loggedPerson)){
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                }
+            }
+            int votes = knowledgeSession.getVotes();
+            knowledgeSession.setVotes(++votes);
+            List<Person> votedPersons = knowledgeSession.getPersonsVoted();
+            votedPersons.add(loggedPerson);
+            knowledgeSession.setPersonsVoted(votedPersons);
+            sessionRepository.save(knowledgeSession);
             return new ResponseEntity<>(HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
@@ -185,14 +195,14 @@ public class SessionController {
             KnowledgeSession session = sessionRepository.findOne(sessionId);
             if (session.getStatus().equals(SessionStatus.APPROVED)) {
                 Person inputPerson = personRepository.findUserByLogin(user.getLogin());
-                for(Person person : session.getPersons()){
+                for(Person person : session.getPersonsAttending()){
                     if(person.getId() == inputPerson.getId()){
                         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                     }
                 }
-                List<Person> sessionPersons = session.getPersons();
+                List<Person> sessionPersons = session.getPersonsAttending();
                 sessionPersons.add(inputPerson);
-                session.setPersons(sessionPersons);
+                session.setPersonsAttending(sessionPersons);
                 sessionRepository.save(session);
                 return new ResponseEntity<>(HttpStatus.CREATED);
             }

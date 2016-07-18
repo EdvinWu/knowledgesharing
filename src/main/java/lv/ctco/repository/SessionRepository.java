@@ -13,7 +13,7 @@ public interface SessionRepository extends JpaRepository<KnowledgeSession,Long> 
     @Query("select s from Session s join s.tags t where UPPER(t.name) LIKE CONCAT('%', CONCAT(UPPER(?1), '%'))")
     List<KnowledgeSession> findByTag(String tag);
 
-    @Query("select p from Session s join s.persons p where p = ?2 and s = ?1")
+    @Query("select p from Session s join s.personsAttending p where p = ?2 and s = ?1")
     Person findPersonByFeedBack(KnowledgeSession session, Person user);
 
     @Query("select s from Session s where s.status = ?1")
