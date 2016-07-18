@@ -23,6 +23,7 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
         registry.addViewController("/addSession").setViewName("addSession");
         registry.addViewController("/sessionDetails").setViewName("sessionDetails");
         registry.addViewController("/registration").setViewName("registration");
+        registry.addViewController("/adminPage").setViewName("adminPage");
 //        registry.addViewController("/adduser").setViewName("adduser");
 //        registry.addRedirectViewController("/adduser","login");
 
