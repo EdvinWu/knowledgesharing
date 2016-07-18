@@ -1,6 +1,6 @@
 package lv.ctco.controllers;
 
-import lv.ctco.services.PersonService;
+import lv.ctco.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class RegistrationController {
     @Autowired
-    PersonService personService;
+    PersonRepository personRepository;
 
 //    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = {"/registration"})
