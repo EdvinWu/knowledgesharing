@@ -142,6 +142,18 @@ function changeSessionVotes(event, id) {
     });
     event.preventDefault();
 }
+function changeSessionAttendingPersons(event, id) {
+    $.ajax({
+        type: 'PUT',
+        url: 'http://localhost:8080/sessions/' + id + '/user',
+        statusCode: {
+            200: function () {
+            }
+        }
+    });
+    event.preventDefault();
+
+}
 
 //function addUserToSessionById(event, id, user) {
 //    $.post("/{id}/user", user)

@@ -50,7 +50,7 @@ public class SessionController {
     }
 
     @RequestMapping(path = TAG_PATH + "/tag", method = RequestMethod.GET)
-     public ResponseEntity<?> getSessionByTag(@RequestParam String name, @RequestParam String status) {
+    public ResponseEntity<?> getSessionByTag(@RequestParam String name, @RequestParam String status) {
 //        if ("".equals(name)) {
 //            return new ResponseEntity<>(sessionRepository.findAll(), HttpStatus.OK);
 //        }
@@ -59,7 +59,7 @@ public class SessionController {
         if (status.equals("all")) {
             sessions = sessionRepository.findByTag(name);
         } else {
-            sessions = sessionRepository.findByTagAndStatus(name,SessionStatus.getByName(status));
+            sessions = sessionRepository.findByTagAndStatus(name, SessionStatus.getByName(status));
         }
 
         if (sessions != null) {
@@ -68,11 +68,11 @@ public class SessionController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @RequestMapping(path = "/{idUser}/{idSession}",method = RequestMethod.POST)
-    public ResponseEntity<?> addUserToSession(@PathVariable ("idUser") long idUser,
-                                              @PathVariable ("idSession") long idSession) {
-        if(!sessionRepository.exists(idSession)|| !personRepository.exists(idUser)) {
-            return new ResponseEntity<>("Session or user not found",HttpStatus.NOT_FOUND);
+    @RequestMapping(path = "/{idUser}/{idSession}", method = RequestMethod.POST)
+    public ResponseEntity<?> addUserToSession(@PathVariable("idUser") long idUser,
+                                              @PathVariable("idSession") long idSession) {
+        if (!sessionRepository.exists(idSession) || !personRepository.exists(idUser)) {
+            return new ResponseEntity<>("Session or user not found", HttpStatus.NOT_FOUND);
         }
 
         Person person = personRepository.findOne(idUser);
@@ -164,7 +164,7 @@ public class SessionController {
         KnowledgeSession knowledgeSession = sessionRepository.findOne(id);
         if (sessionRepository.exists(id)) {
             for (Person person : knowledgeSession.getPersonsVoted()) {
-                if(person.equals(loggedPerson)){
+                if (person.equals(loggedPerson)) {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
                 }
             }
@@ -180,35 +180,39 @@ public class SessionController {
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteSessionById(@PathVariable("id") long id) {
-        if (sessionRepository.exists(id)) {
-            sessionRepository.delete(id);
-            return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<?> deleteSessionById(@PathVariable("id") long id, Principal principal) {
+        Person loggedPerson = personRepository.findUserByLogin(principal.getName());
+        List<UserRole> roles = loggedPerson.getUserRoles();
+        for (UserRole role : roles) {
+            if (role.getRole().compareTo("ADMIN") == 0) {
+                if (sessionRepository.exists(id)) {
+                    sessionRepository.delete(id);
+                    return new ResponseEntity<>(HttpStatus.OK);
+                }
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @RequestMapping(path = "/{sessionId}/user", method = RequestMethod.POST)
+    @RequestMapping(path = "/{sessionId}/user", method = RequestMethod.PUT)
     public ResponseEntity<?> addPersonToSession(@PathVariable("sessionId") long sessionId,
-                                                Person user){
-        if(sessionRepository.exists(sessionId)){
-            KnowledgeSession session = sessionRepository.findOne(sessionId);
-            if (session.getStatus().equals(SessionStatus.APPROVED)) {
-                Person inputPerson = personRepository.findUserByLogin(user.getLogin());
-                for(Person person : session.getPersonsAttending()){
-                    if(person.getId() == inputPerson.getId()){
-                        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-                    }
+                                                Principal principal) {
+        Person loggedPerson = personRepository.findUserByLogin(principal.getName());
+        KnowledgeSession knowledgeSession = sessionRepository.findOne(sessionId);
+        if (sessionRepository.exists(sessionId)) {
+            for (Person person : knowledgeSession.getPersonsAttending()) {
+                if (person.equals(loggedPerson)) {
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
                 }
-                List<Person> sessionPersons = session.getPersonsAttending();
-                sessionPersons.add(inputPerson);
-                session.setPersonsAttending(sessionPersons);
-                sessionRepository.save(session);
-                return new ResponseEntity<>(HttpStatus.CREATED);
             }
+            List<Person> sessionPersons = knowledgeSession.getPersonsAttending();
+            sessionPersons.add(loggedPerson);
+            knowledgeSession.setPersonsAttending(sessionPersons);
+            sessionRepository.save(knowledgeSession);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
 }
 
