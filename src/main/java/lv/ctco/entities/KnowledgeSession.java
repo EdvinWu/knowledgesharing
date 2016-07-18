@@ -31,10 +31,32 @@ public class KnowledgeSession {
     private List<Feedback> feedbacks = new ArrayList<>();
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "session_user",
-            joinColumns = @JoinColumn(name = "session_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
-    private List<Person> persons = new ArrayList<>();
+    @JoinTable(name = "session_user_attending",
+            joinColumns = @JoinColumn(name = "attending_session_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "attending_user_id", referencedColumnName = "id"))
+    private List<Person> personsAttending = new ArrayList<>();
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "session_user_voted",
+            joinColumns = @JoinColumn(name = "vote_session_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "voted_user_id", referencedColumnName = "id"))
+    private List<Person> personsVoted = new ArrayList<>();
+
+    public List<Person> getPersonsAttending() {
+        return personsAttending;
+    }
+
+    public void setPersonsAttending(List<Person> personsAttending) {
+        this.personsAttending = personsAttending;
+    }
+
+    public List<Person> getPersonsVoted() {
+        return personsVoted;
+    }
+
+    public void setPersonsVoted(List<Person> personsVoted) {
+        this.personsVoted = personsVoted;
+    }
 
     public String getDescription() {
         return description;
@@ -109,15 +131,6 @@ public class KnowledgeSession {
         if (feedbacks != null)
             this.feedbacks.addAll(feedbacks);
     }
-
-    public List<Person> getPersons() {
-        return persons;
-    }
-
-    public void setPersons(List<Person> persons) {
-        this.persons = persons;
-    }
-
 
     public boolean removeFeedback(long feedbackID) {
         Optional<Feedback> feedback = feedbacks.stream()
