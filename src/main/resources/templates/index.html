@@ -38,8 +38,8 @@
 
 <div class="jumbotron">
     <div class="container">
-        <h1>Hello, world!</h1>
-        <p>Some greeting text.</p>
+        <h1 th:text="'Hello, ' + ${username} + '!'" />
+        <p>Welcome to Knowledge Sharing Application !</p>
 
         <a class="btn btn-lg btn-primary" href="addSession" role="button">Propose New Session</a>
         <a class="btn btn-lg btn-primary"
@@ -99,7 +99,7 @@
         <p><a class="btn btn-default" href="#" role="button">Vote&raquo;</a></p>
         <p><a class="btn btn-default" href="#" role="button">Subscribe/Join&raquo;</a></p>
         <p><a class="btn btn-default" href="sessionDetails.html?id={{id}}" role="button">Details&raquo;</a></p>
-        <p><a class="btn btn-default" onclick="changeSessionStatus(event, {{id}}, 'approved')" role="button">Approve</a></p>
+        <p><a  class="btn btn-default" onclick="changeSessionStatus(event, {{id}}, 'approved')" role="button">Approve</a></p>
         <p><a class="btn btn-default" onclick="changeSessionStatus(event, {{id}}, 'done')" role="button">Mark as done</a></p>
         <p><a class="btn btn-default" onclick="removeElement(event, {{id}})">Delete&raquo;</a></p>
     </div>

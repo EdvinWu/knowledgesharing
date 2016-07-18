@@ -1,5 +1,6 @@
 package lv.ctco.controllers;
 
+import lv.ctco.entities.Person;
 import lv.ctco.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,7 +17,9 @@ public class ProfileController {
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = {"/profile"})
     public String profile(Model model) {
-        model.addAttribute("user", personService.getAuthenticatedPerson());
+        Person person = personService.getAuthenticatedPerson();
+        model.addAttribute("username", person.getFullName());
+        model.addAttribute("user", person);
         return "profile";
     }
 }
