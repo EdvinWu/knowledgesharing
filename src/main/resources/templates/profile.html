@@ -27,12 +27,15 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <script src="js/handlebars.js"></script>
-    <script src="js/sessions.js"></script>
+    <script src="js/profile.js"></script>
 
     <script>
-        $(document).ready(function () {
-            drawSessionList();
-        });
+//        $(document).ready(function () {
+//            drawSessionList();
+//        });
+        function redirect(address) {
+            window.location = "http://localhost:8080/" + address;
+        }
     </script>
 </head>
 
@@ -43,10 +46,14 @@
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
     <div class="container">
-        <h1 th:text="'Hello, ' + ${username} + '!'" />
+        <h1 th:text="'Hello, ' + ${username} + '!'"/>
+
         <p>Welcome to your Profile !</p>
         <button type="button" href="#" class="btn btn-lg btn-primary">Visited Sessions</button>
         <button type="button" href="#" class="btn btn-lg btn-primary">Proposed by me</button>
+        <button type="button" style="visibility: hidden" id="adminButton" onclick="redirect('adminPage')" class="btn btn-lg btn-primary">Admin
+            console
+        </button>
     </div>
 </div>
 

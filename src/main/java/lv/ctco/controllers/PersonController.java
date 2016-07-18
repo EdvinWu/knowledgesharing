@@ -58,11 +58,11 @@ public class PersonController {
     @Transactional
     @RequestMapping(path = "adduser", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
     public ResponseEntity<?> userAdd(@RequestParam String username,
-                                                    String fullname,
-                                                    String password){
+                                     String fullname,
+                                     String password) {
         Person person = new Person();
         Person newUser = personRepository.findUserByLogin(username);
-        if(newUser == null) {
+        if (newUser == null) {
             person.setLogin(username);
             person.setFullName(fullname);
             person.setPassword(password);
@@ -74,7 +74,7 @@ public class PersonController {
 //            HttpHeaders httpHeaders = new HttpHeaders();
 //            httpHeaders.setLocation(linkLogin);
             return new ResponseEntity<>(HttpStatus.CREATED);
-        }else {
+        } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -111,5 +111,18 @@ public class PersonController {
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @Transactional
+    @RequestMapping(path = "/person/isadmin", method = RequestMethod.GET)
+    public boolean getAdminPrivileges(Principal principal) {
+        Person loggedPerson = personRepository.findUserByLogin(principal.getName());
+        List<UserRole> roles = loggedPerson.getUserRoles();
+        for (UserRole role : roles) {
+            if (role.getRole().equals("ADMIN")) {
+                return true;
+            }
+        }
+        return false;
     }
 }

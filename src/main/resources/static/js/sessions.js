@@ -181,5 +181,3 @@ function removeElement(event, id) {
     });
     event.preventDefault();
 }
-
-
