@@ -18,4 +18,7 @@ public interface SessionRepository extends JpaRepository<KnowledgeSession,Long> 
 
     @Query("select s from Session s where s.status = ?1")
     List <KnowledgeSession> findSessionByStatus(SessionStatus status);
+
+    @Query("select s from Session s join s.tags t where UPPER(t.name) LIKE CONCAT('%', CONCAT(UPPER(?1), '%')) and s.status = ?2" )
+    List<KnowledgeSession> findByTagAndStatus(String tag,SessionStatus status);
 }

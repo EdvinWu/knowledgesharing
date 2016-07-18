@@ -64,7 +64,7 @@
 <hr/>
 
 <div class="container">
-    <form role="form" action="http://localhost:8080/sessions/tag/tag" method="get">
+    <form id="tagSearchForm" role="form" onsubmit="loadByTag(event)">
         <div class="row">
             <div class="col-lg-6">
                 <div class="input-group">
@@ -76,6 +76,9 @@
             </div><!-- /.col-lg-6 -->
         </div><!-- /.row -->
     </form>
+    <div>
+        <h2 id="sessionListName"></h2>
+    </div>
 </div>
 
 <hr/>

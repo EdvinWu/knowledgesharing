@@ -50,9 +50,18 @@ public class SessionController {
     }
 
     @RequestMapping(path = TAG_PATH + "/tag", method = RequestMethod.GET)
-     public ResponseEntity<?> getSessionByTag(@RequestParam String name) {
-        List<KnowledgeSession> sessions;
-        sessions = sessionRepository.findByTag(name);
+     public ResponseEntity<?> getSessionByTag(@RequestParam String name, @RequestParam String status) {
+//        if ("".equals(name)) {
+//            return new ResponseEntity<>(sessionRepository.findAll(), HttpStatus.OK);
+//        }
+
+        List<KnowledgeSession> sessions = new ArrayList<>();
+        if (status.equals("all")) {
+            sessions = sessionRepository.findByTag(name);
+        } else {
+            sessions = sessionRepository.findByTagAndStatus(name,SessionStatus.getByName(status));
+        }
+
         if (sessions != null) {
             return new ResponseEntity<>(sessions, HttpStatus.OK);
         }
@@ -100,14 +109,11 @@ public class SessionController {
     @RequestMapping(path = "bystatus/{status}", method = RequestMethod.GET)
     public ResponseEntity<?> getSessionsByStatus(@PathVariable("status") String status) {
         List<KnowledgeSession> sessions = new ArrayList<>();
-        if (status.equals("all"))
+        if (status.equals("all")) {
             sessions = sessionRepository.findAll();
-        if (status.equals("pending"))
-            sessions = sessionRepository.findSessionByStatus(PENDING);
-        if (status.equals("approved"))
-            sessions = sessionRepository.findSessionByStatus(APPROVED);
-        if (status.equals("done"))
-            sessions = sessionRepository.findSessionByStatus(DONE);
+        } else {
+            sessions = sessionRepository.findSessionByStatus(SessionStatus.getByName(status));
+        }
         return new ResponseEntity<>(sessions, HttpStatus.OK);
     }
 
