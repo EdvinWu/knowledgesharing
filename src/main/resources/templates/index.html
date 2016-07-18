@@ -97,7 +97,7 @@
         <h2>{{title}}</h2>
         <p>{{author}}</p>
         <p><a class="btn btn-default" onclick="changeSessionVotes(event, {{id}})" role="button">Vote&raquo;</a></p>
-        <p><a class="btn btn-default" href="" role="button">Subscribe/Join&raquo;</a></p>
+        <p><a class="btn btn-default" href="" role="button" onclick="changeSessionAttendingPersons(event, {{id}})">Subscribe/Join&raquo;</a></p>
         <p><a class="btn btn-default" href="sessionDetails.html?id={{id}}" role="button">Details&raquo;</a></p>
         <p><a  class="btn btn-default" onclick="changeSessionStatus(event, {{id}}, 'approved')" role="button">Approve</a></p>
         <p><a class="btn btn-default" onclick="changeSessionStatus(event, {{id}}, 'done')" role="button">Mark as done</a></p>
